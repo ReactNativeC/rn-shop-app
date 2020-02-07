@@ -6,16 +6,19 @@ import Colors  from '../constants/colors';
 import { Platform } from 'react-native';
 
 const ShopNavigator = createStackNavigator({
-  "overview" : ProductsOverviewScreen, 
+  "products" : ProductsOverviewScreen, 
   "productDetails": ProductDetailScreen
 },
 {
   defaultNavigationOptions: {
-    headerTitle: 'Shop App', 
+    headerTitle: 'Shop App',     
     headerStyle: {
-      backgroundColor: Platform.OS == 'ios' ? 'white' : Colors.primaryColor
+      backgroundColor: Platform.OS == 'ios' ? 'white' : Colors.primaryColor,             
     }, 
-    headerTintColor: Platform.OS == 'ios' ? Colors.primaryColor : 'white'
+    headerTintColor: Platform.OS == 'ios' ? Colors.primaryColor : 'white',     
+    headerTitleStyle: {
+      fontSize: 22,
+    }
   }
 });
 
