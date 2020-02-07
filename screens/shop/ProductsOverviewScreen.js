@@ -13,7 +13,7 @@ const renderProductItem = itemData => {
 
 const ProductsOverviewScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.availableProducts)
-  console.log(PRODUCTS);
+  
   return (
     <FlatList
       data={PRODUCTS} 
