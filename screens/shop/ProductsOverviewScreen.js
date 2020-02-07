@@ -1,6 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useSelector  } from 'react-redux';
+import ProductComponent from '../../components/ProductComponent';
+
+const renderProductItem = itemData => {
+  return (<ProductComponent 
+            title={itemData.item.title} 
+            image={itemData.item.imageUrl} 
+            description={itemData.item.description} 
+         />)
+}
 
 const ProductsOverviewScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.availableProducts)
@@ -8,7 +17,7 @@ const ProductsOverviewScreen = (props) => {
   return (
     <FlatList
       data={PRODUCTS} 
-      renderItem={(itemData) => {return (<Text>{itemData.item.title}</Text>)}} 
+      renderItem = {renderProductItem} 
       showsVerticalScrollIndicator={false}
     />
   );
