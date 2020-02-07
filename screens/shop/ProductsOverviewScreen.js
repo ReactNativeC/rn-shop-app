@@ -1,13 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useSelector  } from 'react-redux';
-import ProductComponent from '../../components/ProductComponent';
+import ProductComponent from '../../components/shop/ProductComponent';
 
 const renderProductItem = itemData => {
   return (<ProductComponent 
             title={itemData.item.title} 
-            image={itemData.item.imageUrl} 
-            description={itemData.item.description} 
+            imageUrl={itemData.item.imageUrl}             
+            price={itemData.item.price}
+            onDetails={()=>{}}            
+            onAddToCart={()=>{}}
          />)
 }
 
