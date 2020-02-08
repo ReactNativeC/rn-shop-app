@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Button, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import Colors from '../../constants/colors';
 
@@ -9,13 +9,11 @@ const ProductDetailScreen = props => {
 
   return (
     <View style={styles.screen}>
-      <Image source={{uri: selectedProduct.imageUrl}} style={styles.image}/>      
-      
-      <View style={styles.heading}>
-        <Text style={styles.title}>{selectedProduct.title}</Text>
-        <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>
-      </View>
-            
+      <Image source={{uri: selectedProduct.imageUrl}} style={styles.image}/>    
+      <View style={styles.actions}>
+        <Button color={Colors.primaryColor} title="Add to Cart" onPress={() => {}} />         
+      </View>  
+      <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>            
       <Text style={styles.description}>{selectedProduct.description}</Text>      
     </View> 
   );
@@ -23,33 +21,30 @@ const ProductDetailScreen = props => {
 
 ProductDetailScreen.navigationOptions = navData => {
   return {
-    headerTitle: navData.navigation.getParam("title")
+    headerTitle: navData.navigation.getParam("title"),         
   }  
 }
   
 const styles = StyleSheet.create({
   screen: {    
     alignItems: 'center',    
-  },
+  },  
   image: {
     width: '100%', 
-    height: '60%',
-  }, 
-  heading: {
-    alignItems: 'center',    
-    marginVertical: 20,
-  }, 
-  title: {
-    fontSize: 22,    
-    color: Colors.primaryColor,
+    height: 300,
+  },
+  actions: {
+    marginVertical: 10,
+    textAlign: 'center',    
   },
   price: {
-    fontSize: 18, 
-    color: '#888'
+    fontSize: 20, 
+    color: '#888',
+    marginVertical: 10,    
   }, 
-  description: {
-    fontSize: 18,
-    marginHorizontal: 20,    
+  description: {  
+    fontSize: 16,    
+    marginHorizontal: 20
   }
 })
 
