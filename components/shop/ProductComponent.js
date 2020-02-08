@@ -60,10 +60,12 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   title: {
+    fontFamily: 'Roboto',
     fontSize: 18,
     marginVertical: 4,
   },
   price: {
+    fontFamily: 'Roboto',
     color: '#888',
   },
   details: {

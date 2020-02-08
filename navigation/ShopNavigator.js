@@ -17,7 +17,11 @@ const ShopNavigator = createStackNavigator({
     }, 
     headerTintColor: Platform.OS == 'ios' ? Colors.primaryColor : 'white',     
     headerTitleStyle: {
-      fontSize: 22,
+      fontFamily: 'Roboto-Bold',
+      fontSize: 20,
+    }, 
+    headerBackTitleStyle: {
+      fontFamily: 'Roboto'
     }
   }
 });

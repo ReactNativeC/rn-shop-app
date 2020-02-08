@@ -38,11 +38,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',    
   },
   price: {
+    fontFamily: 'Roboto',
     fontSize: 20, 
     color: '#888',
     marginVertical: 10,    
   }, 
   description: {  
+    fontFamily: 'Roboto',
     fontSize: 16,    
     marginHorizontal: 20
   }
