@@ -6,8 +6,8 @@ import Colors  from '../constants/colors';
 import { Platform } from 'react-native';
 
 const ShopNavigator = createStackNavigator({
-  "products" : ProductsOverviewScreen, 
-  "productDetails": ProductDetailScreen
+  "Products" : ProductsOverviewScreen, 
+  "ProductDetails": ProductDetailScreen
 },
 {
   defaultNavigationOptions: {
