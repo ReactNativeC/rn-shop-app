@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Button, Image } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import * as cartActions from '../../store/actions/cart';
 import Colors from '../../constants/colors';
 
 const ProductDetailScreen = props => { 
@@ -11,7 +12,7 @@ const ProductDetailScreen = props => {
     <View style={styles.screen}>
       <Image source={{uri: selectedProduct.imageUrl}} style={styles.image}/>    
       <View style={styles.actions}>
-        <Button color={Colors.primaryColor} title="Add to Cart" onPress={() => {}} />         
+        <Button color={Colors.primaryColor} title="Add to Cart" onPress={() => { dispatch(cartActions.addToCart(itemData.item)) }} />         
       </View>  
       <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>            
       <Text style={styles.description}>{selectedProduct.description}</Text>      
