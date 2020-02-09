@@ -19,7 +19,9 @@ const CartScreen = props => {
         sum: state.cart.cartItems[key].sum 
       });
     }
-    return transformedCartItems;
+    return transformedCartItems.sort((a, b) =>
+      a.productPrice > b.productId ? 1 : -1
+    );
   });
   
   const deleteItem = (productId) => {
