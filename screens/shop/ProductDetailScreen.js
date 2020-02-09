@@ -3,20 +3,23 @@ import { Text, View, StyleSheet, Button, Image } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as cartActions from '../../store/actions/cart';
 import Colors from '../../constants/colors';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ProductDetailScreen = props => { 
   const productId = props.navigation.getParam("productId");
   const selectedProduct = useSelector(state=> state.products.availableProducts.find(product => product.id === productId));
 
   return (
-    <View style={styles.screen}>
-      <Image source={{uri: selectedProduct.imageUrl}} style={styles.image}/>    
-      <View style={styles.actions}>
-        <Button color={Colors.primaryColor} title="Add to Cart" onPress={() => { dispatch(cartActions.addToCart(itemData.item)) }} />         
-      </View>  
-      <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>            
-      <Text style={styles.description}>{selectedProduct.description}</Text>      
-    </View> 
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.screen}>
+        <Image source={{ uri: selectedProduct.imageUrl }} style={styles.image} />
+        <View style={styles.actions}>
+          <Button color={Colors.primaryColor} title="Add to Cart" onPress={() => { dispatch(cartActions.addToCart(itemData.item)) }} />
+        </View>
+        <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>
+        <Text style={styles.description}>{selectedProduct.description}</Text>
+      </View>
+    </ScrollView>
   );
 };
 

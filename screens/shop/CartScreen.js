@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, View, Button, StyleSheet, Platform } from 'react-native';
+import { Text, View, Button, StyleSheet, Platform, FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
 import Colors from '../../constants/colors';
+import CartItem from '../../components/shop/CartItem';
 
 const CartScreen = props => {
   const totalAmount = useSelector(state => state.cart.totalAmount);
@@ -18,15 +19,28 @@ const CartScreen = props => {
     }
     return transformedCartItems;
   });
-
+  const renderCartItem = (itemData) => {
+    return (
+      <CartItem 
+        quantity={itemData.item.quantity}
+        productTitle={itemData.item.productTitle}
+        sum={itemData.item.sum}
+      />
+    )
+  }
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.summaryText}>Total: <Text style={styles.amount}>${totalAmount}</Text></Text>
         <Button title="Order Now" color={Colors.accentColor} disabled={cartItems.length ===0}/>
       </View>
-      <View>
-        <Text>CART ITEMS</Text>
+      <View style={styles.cartItems}>
+        <FlatList 
+          data={cartItems}
+          keyExtractor={item => item.productId}
+          renderItem={renderCartItem}
+          style={styles.flatList}
+        />
       </View>
     </View>
   );
@@ -56,6 +70,9 @@ const styles = StyleSheet.create({
   }, 
   amount: {
     color: Colors.primaryColor
+  }, 
+  flatList: {
+    height: '100%'
   }
 })
 export default CartScreen;
