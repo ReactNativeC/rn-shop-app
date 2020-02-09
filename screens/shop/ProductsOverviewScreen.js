@@ -5,6 +5,8 @@ import ProductComponent from '../../components/shop/ProductComponent';
 import * as cartActions from '../../store/actions/cart';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
+import { Ionicons } from '@expo/vector-icons';
+import Colors from '../../constants/colors';
 
 const ProductsOverviewScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.availableProducts)
@@ -42,7 +44,12 @@ ProductsOverviewScreen.navigationOptions = navData => {
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
           <Item title="Cart" iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'} onPress={() => { navData.navigation.navigate('Cart')}} />
         </HeaderButtons>
-      )
+      ), 
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item title="Menu"  iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'} onPress={() => {navData.navigation.toggleDrawer()}} />
+      </HeaderButtons>      
+    )
   }
 }
 
