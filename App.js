@@ -10,16 +10,18 @@ import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 
 //TODO - this is for development only remove this when deploying to prod
-import { composeWithDevTools } from 'redux-devtools-extension'
+//import { composeWithDevTools } from 'redux-devtools-extension'
 
 const rootReducer = combineReducers({
   products: productsReducer, 
   cart: cartReducer,  
 })
 
+
+const store = createStore(rootReducer);
+
 //TODO --this is for development debugging only. remove "composeWithDevTools" argument to the creatStore function when deploying to prod.
-//const store = createStore(rootReducer);
-const store = createStore(rootReducer, composeWithDevTools());
+//const store = createStore(rootReducer, composeWithDevTools());
 
 const fetchFonts = () => {
   return Font.loadAsync({
