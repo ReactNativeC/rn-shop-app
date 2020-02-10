@@ -1,5 +1,6 @@
 import * as cartActions from '../actions/cart';
 import CartItem from '../../model/cart-item';
+import * as orderActions from '../actions/order';
 
 const initialState = {
   cartItems: {}, 
@@ -60,6 +61,9 @@ export default (state = initialState, action) => {
         cartItems: updatedCartItems,
         totalAmount: (state.totalAmount - selectedCartItem.productPrice) < 0 ? 0 : (state.totalAmount - selectedCartItem.productPrice)
       }
+    case orderActions.PLACE_AN_ORDER: //every action in the UI reaches all reducers. so we can check for order action here.
+      //clear the cart
+      return initialState;
 
   }
   return state;
