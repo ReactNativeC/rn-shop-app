@@ -14,13 +14,15 @@ const OrdersScreen = props => {
         orderId: key, 
         cartItems: state.order.orders[key].cartItems, 
         totalAmount: state.order.orders[key].totalAmount,
-        date: state.order.orders[key].date
+        date: state.order.orders[key].readableDate
       });
     }
     return transformedOrders.sort((a,b) => a.key < b.key ? 1 : -1);
   });
   
   const renderOrderItem  = (itemData) => {    
+    //console.log("itemData.item.date: " + readableDate(new Date()))
+    //console.log("itemData.item.readableDate: " + itemData.item.readableDate);
     return (<OrderItem 
       cartItems = {itemData.item.cartItems}
       totalAmount = {itemData.item.totalAmount}
