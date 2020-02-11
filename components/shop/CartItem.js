@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
 const CartItem = props => {
   return (
     <View style={styles.cartItem}>
@@ -10,9 +11,11 @@ const CartItem = props => {
       </View>
       <View style={styles.itemContainer}>
         <Text style={styles.mainText}>{props.sum.toFixed(2)}</Text>
+        { props.deletable &&
         <TouchableOpacity onPress={props.onDelete}>
           <Ionicons name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'} size={23} color="red" />
-        </TouchableOpacity>        
+        </TouchableOpacity> 
+        }       
       </View>
     </View>
   )

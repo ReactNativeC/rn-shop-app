@@ -1,13 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet, FlatList, Platform, TouchableOpacity } from 'react-native';
 import CartItem from '../../components/shop/CartItem';
 import Colors from '../../constants/colors';
 
-import { compose } from 'redux';
-import { FA5Style } from '@expo/vector-icons/build/FontAwesome5';
-
 const OrderItem = props => {  
+  const [showDetails, setShowDetails]= useState(false);
+
   const cartItemsArray = []
   for (const key in props.cartItems)
     cartItemsArray.push({
@@ -39,6 +37,8 @@ const OrderItem = props => {
         <View style={styles.orderDateContainer}>
           <Text style={styles.orderDate} numberOfLines={1}> Ordered on {props.orderedDate}</Text>
         </View>
+        <Button title={showDetails? "Hide Details":"Show Details"} color={Colors.accentColor} onPress={() => setShowDetails(state => !state)} />
+        { showDetails && 
         <View>
           <FlatList 
             data={cartItemsArray}
@@ -47,7 +47,7 @@ const OrderItem = props => {
             showsVerticalScrollIndicator={false}
           />
         </View>
-        
+        }
       </View>
     </View>
   )
