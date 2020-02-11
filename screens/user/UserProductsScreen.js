@@ -1,10 +1,11 @@
 import React from 'react';
-import { FlatList, Platform } from 'react-native';
+import { FlatList, View, Platform, Button, Dimensions , StyleSheet} from 'react-native';
 import { useSelector, useDispatch  } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import * as cartActions from '../../store/actions/cart';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
+import Colors from '../../constants/colors';
 
 
 const UserProductsScreen = (props) => {
@@ -18,7 +19,10 @@ const UserProductsScreen = (props) => {
               price={itemData.item.price}
               onDetails={()=> {}}
               onAddToCart={()=>{}}
-           />)
+            >              
+              <View style={styles.button}><Button  title="Edit" color={Colors.primaryColor} /></View>
+              <View style={styles.button}><Button style={styles.button} title="Delete" color={Colors.primaryColor} /></View>
+            </ProductItem>)
   }
   
   return (
@@ -46,5 +50,11 @@ UserProductsScreen.navigationOptions = navData => {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  button: {
+    width: Dimensions.get('window').width / 4,
+  }
+})
 
 export default UserProductsScreen;

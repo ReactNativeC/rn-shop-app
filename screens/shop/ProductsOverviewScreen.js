@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, Platform } from 'react-native';
+import { FlatList, Button, Platform } from 'react-native';
 import { useSelector, useDispatch  } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import * as cartActions from '../../store/actions/cart';
@@ -15,15 +15,16 @@ const ProductsOverviewScreen = (props) => {
     return (<ProductItem 
               title={itemData.item.title} 
               imageUrl={itemData.item.imageUrl}             
-              price={itemData.item.price}
-              onDetails={()=>{
+              price={itemData.item.price}          
+           >
+              <Button color={Colors.primaryColor} title="View Details" onPress={()=> {
                 props.navigation.navigate('ProductDetails', {
                   productId: itemData.item.id, 
                   title: itemData.item.title
                 })
-              }}
-              onAddToCart={()=>{ dispatch(cartActions.addToCart(itemData.item)) }}
-           />)
+              }} />
+              <Button color={Colors.primaryColor} title="Add to Cart" onPress={()=>{ dispatch(cartActions.addToCart(itemData.item)) }} />
+           </ProductItem>)
   }
   
   return (
