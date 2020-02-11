@@ -3,7 +3,7 @@ import { Text, View, Button, StyleSheet, Image, Platform, TouchableOpacity, Touc
 import Colors from '../../constants/colors';
 
 
-const ProductComponent = props => {
+const ProductItem = props => {
   let TouchableComponent = TouchableOpacity;
 
   if (Platform.OS == 'android' && Platform.Version >= 21)
@@ -82,4 +82,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ProductComponent;
+export default ProductItem;

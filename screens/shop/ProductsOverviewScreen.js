@@ -1,19 +1,18 @@
 import React from 'react';
 import { FlatList, Platform } from 'react-native';
 import { useSelector, useDispatch  } from 'react-redux';
-import ProductComponent from '../../components/shop/ProductComponent';
+import ProductItem from '../../components/shop/ProductItem';
 import * as cartActions from '../../store/actions/cart';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
-import { Ionicons } from '@expo/vector-icons';
-import Colors from '../../constants/colors';
+
 
 const ProductsOverviewScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.availableProducts)
   const dispatch = useDispatch(); 
 
   const renderProductItem = itemData => {
-    return (<ProductComponent 
+    return (<ProductItem 
               title={itemData.item.title} 
               imageUrl={itemData.item.imageUrl}             
               price={itemData.item.price}

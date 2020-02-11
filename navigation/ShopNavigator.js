@@ -9,6 +9,7 @@ import CartScreen from '../screens/shop/CartScreen';
 import Colors  from '../constants/colors';
 import { Platform } from 'react-native';
 import OrdersScreen from '../screens/shop/OrdersScreen';
+import UserProductsScreen from '../screens/user/UserProductsScreen';
 
 
 const defaultNavigationConfig = {
@@ -60,9 +61,27 @@ const OrdersNavigator = createStackNavigator({
   defaultNavigationOptions: defaultNavigationConfig
 });
 
+const UserProductsNavigator = createStackNavigator({
+  UserProducts : UserProductsScreen,
+  UserProductDetails: ProductDetailScreen,
+}, 
+{
+  navigationOptions: {
+    drawerIcon: drawerConfig => (
+      <Ionicons 
+        name={Platform.OS === 'android'? 'md-create': 'ios-create'}
+        size={23}
+        color={drawerConfig.tintColor}
+      />
+    )
+  },
+  defaultNavigationOptions: defaultNavigationConfig
+});
+
 const MenuNavigator = createDrawerNavigator({
   Products : ProductsNavigator,
-  Orders : OrdersNavigator
+  Orders : OrdersNavigator, 
+  UserProducts: UserProductsNavigator,
 },
 { 
   contentOptions:{

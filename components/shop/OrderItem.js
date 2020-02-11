@@ -37,7 +37,9 @@ const OrderItem = props => {
         <View style={styles.orderDateContainer}>
           <Text style={styles.orderDate} numberOfLines={1}> Ordered on {props.orderedDate}</Text>
         </View>
-        <Button title={showDetails? "Hide Details":"Show Details"} color={Colors.accentColor} onPress={() => setShowDetails(state => !state)} />
+        <View style={{marginBottom: 10}}>
+          <Button  title={showDetails? "Hide Details":"Show Details"} color={Colors.accentColor} onPress={() => setShowDetails(state => !state)} />
+        </View>
         { showDetails && 
         <View>
           <FlatList 
