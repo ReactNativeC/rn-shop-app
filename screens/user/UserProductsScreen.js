@@ -17,8 +17,7 @@ const UserProductsScreen = (props) => {
               title={itemData.item.title} 
               imageUrl={itemData.item.imageUrl}             
               price={itemData.item.price}
-              onDetails={()=> {}}
-              onAddToCart={()=>{}}
+              onDetails={()=> {}}             
             >              
               <View style={styles.button}><Button  title="Edit" color={Colors.primaryColor} /></View>
               <View style={styles.button}><Button style={styles.button} title="Delete" color={Colors.primaryColor} /></View>

@@ -5,24 +5,25 @@ import ProductItem from '../../components/shop/ProductItem';
 import * as cartActions from '../../store/actions/cart';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
-
+import Colors from '../../constants/colors';
 
 const ProductsOverviewScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.availableProducts)
   const dispatch = useDispatch(); 
-
+  const onDetails = (id, title) => {
+    props.navigation.navigate('ProductDetails', {
+      productId: id, 
+      title: title
+    })
+  }
   const renderProductItem = itemData => {
     return (<ProductItem 
               title={itemData.item.title} 
               imageUrl={itemData.item.imageUrl}             
-              price={itemData.item.price}          
+              price={itemData.item.price}     
+              onDetails={onDetails.bind(this, itemData.item.id, itemData.item.title)}     
            >
-              <Button color={Colors.primaryColor} title="View Details" onPress={()=> {
-                props.navigation.navigate('ProductDetails', {
-                  productId: itemData.item.id, 
-                  title: itemData.item.title
-                })
-              }} />
+              <Button color={Colors.primaryColor} title="View Details" onPress={onDetails.bind(this, itemData.item.id, itemData.item.title)} />
               <Button color={Colors.primaryColor} title="Add to Cart" onPress={()=>{ dispatch(cartActions.addToCart(itemData.item)) }} />
            </ProductItem>)
   }
