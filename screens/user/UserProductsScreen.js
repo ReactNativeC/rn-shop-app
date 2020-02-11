@@ -3,11 +3,10 @@ import { FlatList, View, Platform, Button, Dimensions , StyleSheet} from 'react-
 import { useSelector, useDispatch  } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import * as cartActions from '../../store/actions/cart';
+import * as productActions from '../../store/actions/products';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
 import Colors from '../../constants/colors';
-
-
 const UserProductsScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.userProducts)
   const dispatch = useDispatch(); 
@@ -20,7 +19,11 @@ const UserProductsScreen = (props) => {
               onDetails={()=> {}}             
             >              
               <View style={styles.button}><Button  title="Edit" color={Colors.primaryColor} /></View>
-              <View style={styles.button}><Button style={styles.button} title="Delete" color={Colors.primaryColor} /></View>
+              <View style={styles.button}>
+                <Button 
+                  style={styles.button} title="Delete" color={Colors.primaryColor} 
+                  onPress={() => {dispatch(productActions.deleteProduct(itemData.item.id))}}/>
+              </View>
             </ProductItem>)
   }
   
