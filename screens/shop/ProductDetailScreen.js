@@ -6,10 +6,11 @@ import Colors from '../../constants/colors';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const ProductDetailScreen = props => { 
+  const dispatch = useDispatch();
+  console.log("start of ProductDetailScreen");
   const productId = props.navigation.getParam("productId");
   const selectedProduct = useSelector(state=> state.products.availableProducts.find(product => product.id === productId));
-  const dispatch = useDispatch();
-
+  
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.screen}>

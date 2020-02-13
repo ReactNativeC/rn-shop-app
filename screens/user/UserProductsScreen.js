@@ -2,7 +2,6 @@ import React from 'react';
 import { FlatList, View, Platform, Button, Dimensions , StyleSheet} from 'react-native';
 import { useSelector, useDispatch  } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
-import * as cartActions from '../../store/actions/cart';
 import * as productActions from '../../store/actions/products';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
@@ -18,10 +17,13 @@ const UserProductsScreen = (props) => {
               price={itemData.item.price}
               onDetails={()=> {}}             
             >              
-              <View style={styles.button}><Button  title="Edit" color={Colors.primaryColor} /></View>
+              <View style={styles.button}>
+                <Button  title="Edit" color={Colors.primaryColor} 
+                  onPress={() => props.navigation.navigate('EditProduct', {productId: itemData.item.id})} />
+              </View>
               <View style={styles.button}>
                 <Button 
-                  style={styles.button} title="Delete" color={Colors.primaryColor} 
+                  title="Delete" color={Colors.primaryColor} 
                   onPress={() => {dispatch(productActions.deleteProduct(itemData.item.id))}}/>
               </View>
             </ProductItem>)
@@ -42,7 +44,7 @@ UserProductsScreen.navigationOptions = navData => {
     headerTitle: "Your Products",
     headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          <Item title="Cart" iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'} onPress={() => { navData.navigation.navigate('Cart')}} />
+          <Item title="Add" iconName={Platform.OS === 'android' ? 'md-add' : 'ios-add'} onPress={() => { navData.navigation.navigate('EditProduct')}} />
         </HeaderButtons>
       ), 
     headerLeft: () => (
