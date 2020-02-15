@@ -22,7 +22,7 @@ const CartScreen = props => {
       });
     }
     return transformedCartItems.sort((a, b) =>
-      a.productPrice > b.productId ? 1 : -1
+      a.productPrice > b.productPrice ? 1 : -1
     );
   });
   
@@ -41,7 +41,7 @@ const CartScreen = props => {
       />
     )
   };
-  
+
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>

@@ -21,8 +21,6 @@ const OrdersScreen = props => {
   });
   
   const renderOrderItem  = (itemData) => {    
-    //console.log("itemData.item.date: " + readableDate(new Date()))
-    //console.log("itemData.item.readableDate: " + itemData.item.readableDate);
     return (<OrderItem 
       cartItems = {itemData.item.cartItems}
       totalAmount = {itemData.item.totalAmount}

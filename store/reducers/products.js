@@ -8,7 +8,6 @@ const initialState = {
 }
 
 export default (state = initialState, action) => {    
-  console.log('actino is' + action.type);
   switch(action.type) {
     case productActions.DELETE_PRODUCT :      
       const updatedUserProducts = state.userProducts.filter(product => product.id !== action.productId);
@@ -22,16 +21,17 @@ export default (state = initialState, action) => {
       const product = action.product;
       const uuidv4 = require('uuid/v4');
       id = uuidv4();
-      
+
+      const newProduct = new Product(id,"u1",product.title, product.imageUrl, product.description, product.price);
+      const newAvailableProducts =  [...state.availableProducts].concat(newProduct);
+      const newUserProducts = [...state.userProducts].concat(newProduct);
+   
       return {
         ...state,         
-        availableProducts: state.availableProducts.push(
-          new Product(id, "u1", product.title, product.imageUrl, product.description, product.price)),
-        userProducts: state.userProducts.push(
-          new Product(id, "u1", product.title, product.imageUrl, product.description, product.price)),              
-      }
+        availableProducts: newAvailableProducts,
+        userProducts: newUserProducts
+       }
     case productActions.EDIT_PRODUCT:     
-    console.log(action.product);
       const updatedProduct = action.product;
       const productToBeUpdated = state.userProducts.find(x => x.id === updatedProduct.id);
       const indexInUserProducts = state.userProducts.findIndex(product => product.id === updatedProduct.id);

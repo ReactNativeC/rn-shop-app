@@ -32,7 +32,7 @@ const OrderItem = props => {
       <View>
         <View style={styles.header}>
           <Text style={styles.headerText}>Order {props.orderId}</Text>
-          <Text style={styles.headerText}>Total Amount: {props.totalAmount.toFixed(2)}</Text>
+          <Text style={styles.headerText}>Total Amount: ${props.totalAmount.toFixed(2)}</Text>
         </View>
         <View style={styles.orderDateContainer}>
           <Text style={styles.orderDate} numberOfLines={1}> Ordered on {props.orderedDate}</Text>

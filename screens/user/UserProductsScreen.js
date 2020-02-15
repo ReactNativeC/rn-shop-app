@@ -10,16 +10,23 @@ const UserProductsScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.userProducts)
   const dispatch = useDispatch(); 
 
+  const onDetails = (id, title) => {
+    props.navigation.navigate('ProductDetails', {
+      productId: id, 
+      title: title
+    })
+  };
+
   const renderProductItem = itemData => {
     return (<ProductItem 
               title={itemData.item.title} 
               imageUrl={itemData.item.imageUrl}             
               price={itemData.item.price}
-              onDetails={()=> {}}             
+              onDetails={onDetails.bind(this, itemData.item.id, itemData.item.title)}             
             >              
               <View style={styles.button}>
                 <Button  title="Edit" color={Colors.primaryColor} 
-                  onPress={() => props.navigation.navigate('EditProduct', {productId: itemData.item.id})} />
+                  onPress={() => props.navigation.navigate('EditProduct', {productId: itemData.item.id, title: itemData.item.title})} />
               </View>
               <View style={styles.button}>
                 <Button 

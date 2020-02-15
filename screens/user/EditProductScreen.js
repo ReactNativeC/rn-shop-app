@@ -7,22 +7,20 @@ import Colors from '../../constants/colors';
 import Product from '../../model/product';
 
 const EditProductScreen = (props) => {
-  console.log("start of EditoroductScreen");
   const dispatch = useDispatch();
   const productId = props.navigation.getParam("productId");
-  const editedProduct = useSelector(state=> state.products.availableProducts.find(product => product.id === productId));
-  
+  const editedProduct = useSelector(state=> state.products.availableProducts.find(product => product.id === productId)); 
+ 
   const [title, setTitle] = useState(editedProduct? editedProduct.title: '');
   const [imageUrl, setImageUrl] =  useState(editedProduct? editedProduct.imageUrl: '');
   const [price, setPrice] = useState(editedProduct? editedProduct.price: '');
   const [description, setDescription] = useState(editedProduct? editedProduct.description: '');
-    
+
   const submitHandler = () => {
-    console.log("submitHandler. ");
     editedProduct ?
-      dispatch(productActions.editProduct(new Product(editedProduct.id, editedProduct.ownerId, title, imageUrl, description, price)))
+      dispatch(productActions.editProduct(new Product(editedProduct.id, editedProduct.ownerId, title, imageUrl, description, parseFloat(parseFloat(price).toFixed(2)))))
       :
-      dispatch(productActions.addProduct(new Product(editedProduct.id, editedProduct.ownerId, title, imageUrl, description, price)))
+      dispatch(productActions.addProduct(new Product(1, "u1", title, imageUrl, description, parseFloat(parseFloat(price).toFixed(2)))))
     props.navigation.navigate('UserProducts');
   }
 
@@ -42,8 +40,8 @@ const EditProductScreen = (props) => {
             </View>
 
             <View style={styles.formControl}>
-              <Text style={styles.titleText}>Price</Text>
-              <TextInput style={styles.input} value={price.toFixed(2)} onChangeText={input=>setPrice(input)} />
+              <Text style={styles.titleText}>Price</Text>            
+              <TextInput keyboardType="numeric" style={styles.input} value={price.toString()} onChangeText={input=>setPrice(input)} />
             </View>
 
             <View style={styles.formControl}>
@@ -73,22 +71,21 @@ const styles = StyleSheet.create({
   titleText:{
     fontSize: 18,
     fontFamily: 'Roboto-Bold',
-    marginBottom: 20,
-    
+    marginBottom: 20,    
   },
   input: {
     fontSize: 18, 
     fontFamily: 'Roboto',
     borderBottomColor: 'black',
     borderBottomWidth: 0.5,
-
   }
 })
 
 
-EditProductScreen.navigationOptions = navData => {
+EditProductScreen.navigationOptions = navData => {  
+  const title = navData.navigation.getParam("title");
   return  {
-    headerTitle: "Add New Product",
+    headerTitle: title? title : "Add New Product",
   }
 }
 
