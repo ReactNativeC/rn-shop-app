@@ -51,7 +51,7 @@ const EditProductScreen = (props) => {
       :
       dispatch(productActions.addProduct(new Product(1, "u1", title, imageUrl, description, parseFloat(parseFloat(price).toFixed(2)))))          
       props.navigation.goBack();
-  },[dispatch, editedProduct, title, imageUrl, description, price])
+  },[dispatch, editedProduct, title, imageUrl, description, price, titleIsValid, priceIsValid])
 
   useEffect(() => {
     props.navigation.setParams({submitFunc: submitHandler});
