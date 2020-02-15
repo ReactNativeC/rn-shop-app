@@ -21,7 +21,10 @@ export default (state = initialState, action) => {
       const product = action.product;
       const uuidv4 = require('uuid/v4');
       id = uuidv4();
-
+      //Dont allow to create an empty product
+      if(product.title.length === 0)
+        return state;
+      
       const newProduct = new Product(id,"u1",product.title, product.imageUrl, product.description, product.price);
       const newAvailableProducts =  [...state.availableProducts].concat(newProduct);
       const newUserProducts = [...state.userProducts].concat(newProduct);

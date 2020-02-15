@@ -22,8 +22,8 @@ const EditProductScreen = (props) => {
     editedProduct ?
       dispatch(productActions.editProduct(new Product(editedProduct.id, editedProduct.ownerId, title, imageUrl, description, parseFloat(parseFloat(price).toFixed(2)))))
       :
-      dispatch(productActions.addProduct(new Product(1, "u1", title, imageUrl, description, parseFloat(parseFloat(price).toFixed(2)))))    
-      props.navigation.navigate('UserProducts');
+      dispatch(productActions.addProduct(new Product(1, "u1", title, imageUrl, description, parseFloat(parseFloat(price).toFixed(2)))))          
+      props.navigation.goBack();
   },[dispatch, editedProduct, title, imageUrl, description, price])
 
   useEffect(() => {
