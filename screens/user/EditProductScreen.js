@@ -32,34 +32,50 @@ const EditProductScreen = (props) => {
   
   return (
     <ScrollView>
-      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={10}>
+      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={80}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.form}>
             <View style={styles.formControl}>
               <Text style={styles.titleText}>Title</Text>
-              <TextInput style={styles.input} value={title} onChangeText={input=>setTitle(input)}/>
+              <TextInput 
+                style={styles.input} 
+                value={title} 
+                onChangeText={input=>setTitle(input)}
+                clearButtonMode="while-editing"      
+                autoCapitalize="sentences"                    
+              />
             </View>
 
             <View style={styles.formControl}>
               <Text style={styles.titleText}>Image Url</Text>
-              <TextInput style={styles.input} value={imageUrl} onChangeText={input=>setImageUrl(input)} />
+              <TextInput style={styles.input} 
+                value={imageUrl} 
+                onChangeText={input=>setImageUrl(input)} 
+                clearButtonMode="while-editing" 
+              />
             </View>
 
             <View style={styles.formControl}>
               <Text style={styles.titleText}>Price</Text>            
-              <TextInput keyboardType="numeric" style={styles.input} value={price.toString()} onChangeText={input=>setPrice(input)} />
+              <TextInput keyboardType="decimal-pad" 
+                style={styles.input} 
+                value={price.toString()} 
+                onChangeText={input=>setPrice(input)} 
+                clearButtonMode="while-editing"
+              />
             </View>
 
             <View style={styles.formControl}>
               <Text style={styles.titleText}>Description</Text>
-              <TextInput style={styles.input} value={description} onChangeText={input=>setDescription(input)} />
-            </View>
-
-            {/* <View Style={styles.formControl}>
-              <Button title={editedProduct?"Edit Product":"Add Product"} color={Colors.primaryColor}
-                onPress={submitHandler}              
+              <TextInput style={styles.input} 
+                value={description} 
+                onChangeText={input=>setDescription(input)} 
+                multiline                
+                blurOnSubmit
+                clearButtonMode="while-editing"     
+                returnKeyType="done"                                                                     
               />
-            </View> */}
+            </View>    
           </View>          
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
