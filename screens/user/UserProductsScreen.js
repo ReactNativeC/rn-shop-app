@@ -11,7 +11,7 @@ const UserProductsScreen = (props) => {
   const dispatch = useDispatch(); 
 
   const onDetails = (id, title) => {
-    props.navigation.navigate('ProductDetails', {
+    props.navigation.navigate('EditProduct', {
       productId: id, 
       title: title
     })
@@ -26,7 +26,7 @@ const UserProductsScreen = (props) => {
             >              
               <View style={styles.button}>
                 <Button  title="Edit" color={Colors.primaryColor} 
-                  onPress={() => props.navigation.navigate('EditProduct', {productId: itemData.item.id, title: itemData.item.title})} />
+                  onPress={onDetails.bind(this, itemData.item.id, itemData.item.title)}  />
               </View>
               <View style={styles.button}>
                 <Button 

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCa, useCallback } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform} from 'react-native';
 import { useDispatch, useSelector  } from 'react-redux';
 import * as productActions from '../../store/actions/products';
 import * as cartActions from '../../store/actions/cart';
 import Colors from '../../constants/colors';
 import Product from '../../model/product';
+import HeaderButton  from '../../components/UI/HeaderButton';
+import { HeaderButtons, Item} from 'react-navigation-header-buttons';
 
 const EditProductScreen = (props) => {
   const dispatch = useDispatch();
@@ -16,14 +18,18 @@ const EditProductScreen = (props) => {
   const [price, setPrice] = useState(editedProduct? editedProduct.price: '');
   const [description, setDescription] = useState(editedProduct? editedProduct.description: '');
 
-  const submitHandler = () => {
+  const submitHandler = useCallback(() => {
     editedProduct ?
       dispatch(productActions.editProduct(new Product(editedProduct.id, editedProduct.ownerId, title, imageUrl, description, parseFloat(parseFloat(price).toFixed(2)))))
       :
-      dispatch(productActions.addProduct(new Product(1, "u1", title, imageUrl, description, parseFloat(parseFloat(price).toFixed(2)))))
-    props.navigation.navigate('UserProducts');
-  }
+      dispatch(productActions.addProduct(new Product(1, "u1", title, imageUrl, description, parseFloat(parseFloat(price).toFixed(2)))))    
+      props.navigation.navigate('UserProducts');
+  },[dispatch, editedProduct, title, imageUrl, description, price])
 
+  useEffect(() => {
+    props.navigation.setParams({submitFunc: submitHandler});
+  }, [submitHandler])
+  
   return (
     <ScrollView>
       <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={10}>
@@ -49,11 +55,11 @@ const EditProductScreen = (props) => {
               <TextInput style={styles.input} value={description} onChangeText={input=>setDescription(input)} />
             </View>
 
-            <View Style={styles.formControl}>
+            {/* <View Style={styles.formControl}>
               <Button title={editedProduct?"Edit Product":"Add Product"} color={Colors.primaryColor}
                 onPress={submitHandler}              
               />
-            </View>
+            </View> */}
           </View>          
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -84,8 +90,14 @@ const styles = StyleSheet.create({
 
 EditProductScreen.navigationOptions = navData => {  
   const title = navData.navigation.getParam("title");
+  const submitFunc = navData.navigation.getParam('submitFunc');
   return  {
     headerTitle: title? title : "Add New Product",
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item title='Add' iconSize={30} iconName={Platform.OS === 'android'? 'md-checkmark' : 'ios-checkmark'} onPress={submitFunc} />
+      </HeaderButtons>
+    )
   }
 }
 

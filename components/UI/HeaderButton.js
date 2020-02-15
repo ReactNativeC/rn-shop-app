@@ -6,11 +6,11 @@ import Colors from '../../constants/colors';
 
 const CustomHeaderButton = props => {
   return (
-    <HeaderButton 
-      {...props} 
+    <HeaderButton           
       IconComponent={Ionicons} 
-      iconSize={23}       
+      iconSize={25}       
       color={ Platform.OS === 'android'? 'white' : Colors.primaryColor }
+      {...props} 
     />  
   );
 }

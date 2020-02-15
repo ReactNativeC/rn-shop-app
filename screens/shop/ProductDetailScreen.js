@@ -8,6 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 const ProductDetailScreen = props => { 
   const dispatch = useDispatch();
   const productId = props.navigation.getParam("productId");
+
   const selectedProduct = useSelector(state=> state.products.availableProducts.find(product => product.id === productId));
   
   return (

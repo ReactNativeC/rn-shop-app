@@ -45,7 +45,7 @@ const CartScreen = props => {
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
-        <Text style={styles.summaryText}>Total: <Text style={styles.amount}>${totalAmount.toFixed(2)}</Text></Text>
+        <Text style={styles.summaryText}>Total: <Text style={styles.amount}>${Math.round(totalAmount.toFixed(2) * 100) / 100}</Text></Text>
         <Button title="Order Now" color={Colors.accentColor} disabled={cartItems.length ===0} onPress={()=>{ dispath(orderActions.placeAnOrder(cartItems, totalAmount)) }} />
       </View>
       <View style={styles.cartItems}>

@@ -34,8 +34,9 @@ export default (state = initialState, action) => {
     case productActions.EDIT_PRODUCT:     
       const updatedProduct = action.product;
       const productToBeUpdated = state.userProducts.find(x => x.id === updatedProduct.id);
+      
       const indexInUserProducts = state.userProducts.findIndex(product => product.id === updatedProduct.id);
-      const indexInAvailableProducts = state.userProducts.findIndex(product => product.id == updatedProduct.id)
+      const indexInAvailableProducts = state.availableProducts.findIndex(product => product.id == updatedProduct.id)
       
       productToBeUpdated.title = updatedProduct.title;
       productToBeUpdated.imageUrl = updatedProduct.imageUrl;
@@ -50,8 +51,8 @@ export default (state = initialState, action) => {
          
       return {
         ...state,
-        userProducts: modifiedUserProducts,
-        availableProducts: modifiedAvailableProducts
+        availableProducts: modifiedAvailableProducts,
+        userProducts: modifiedUserProducts,        
       }
   }
   return state;
