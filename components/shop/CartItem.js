@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Card from '../../components/UI/Card';
 
 const CartItem = props => {
   return (
-    <View style={styles.cartItem}>
+    <Card style={styles.cartItem}>
       <View style={styles.itemContainer}>
         <Text style={styles.quantity}>{props.quantity}</Text>
         <Text style={styles.mainText}>{props.productTitle}</Text>
@@ -17,7 +18,7 @@ const CartItem = props => {
         </TouchableOpacity> 
         }       
       </View>
-    </View>
+    </Card>
   )
 }
 
@@ -28,14 +29,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 5,
     padding: 10,
-    backgroundColor: 'white',
-
-    shadowColor: 'black',
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 5,
-    borderRadius: 10,
+    backgroundColor: 'white',    
   }, 
   itemContainer:{
     flexDirection: 'row',  

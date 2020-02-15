@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, Platform, TouchableOpacity } from 'react-native';
 import CartItem from '../../components/shop/CartItem';
 import Colors from '../../constants/colors';
+import Card from '../../components/UI/Card';
 
 const OrderItem = props => {  
   const [showDetails, setShowDetails]= useState(false);
@@ -28,7 +29,7 @@ const OrderItem = props => {
   };
       
   return (
-    <View style={styles.order}> 
+    <Card style={styles.order}> 
       <View>
         <View style={styles.header}>
           <Text style={styles.headerText}>Order {props.orderId}</Text>
@@ -51,7 +52,7 @@ const OrderItem = props => {
         </View>
         }
       </View>
-    </View>
+    </Card>
   )
 }
 
@@ -61,12 +62,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: 'white',
 
-    shadowColor: 'black',
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 5,
-    borderRadius: 10,
+ 
   }, 
   header: {
     flexDirection: 'row',
