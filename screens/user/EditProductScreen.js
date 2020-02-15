@@ -17,6 +17,28 @@ const EditProductScreen = (props) => {
   const [imageUrl, setImageUrl] =  useState(editedProduct? editedProduct.imageUrl: '');
   const [price, setPrice] = useState(editedProduct? editedProduct.price: '');
   const [description, setDescription] = useState(editedProduct? editedProduct.description: '');
+  
+  const [titleIsValid, setTitleIsValid] = useState(false);
+  const [priceIsValid, setPriceIsValid] = useState(false);
+  
+  const titleChangeHandler = text => {
+    if(text.length < 2)
+      setTitleIsValid(false);
+    else
+      setTitleIsValid(true)
+    
+      setTitle(text);    
+  }
+
+  const priceChangeHandler = price => {
+   
+    if(parseFloat(price) < 1.0)
+      setPriceIsValid(false);
+    else
+      setPriceIsValid(true)
+    
+      setPrice(price);   
+  }
 
   const submitHandler = useCallback(() => {
     if(title.length < 2 || price < 1)
@@ -37,7 +59,7 @@ const EditProductScreen = (props) => {
   
   return (
     <ScrollView>
-      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={80}>
+      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={60}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.form}>
             <View style={styles.formControl}>
@@ -45,12 +67,12 @@ const EditProductScreen = (props) => {
               <TextInput 
                 style={styles.input} 
                 value={title} 
-                onChangeText={input=>setTitle(input)}
+                onChangeText={titleChangeHandler}
                 clearButtonMode="while-editing"      
                 autoCapitalize="sentences"                    
               />
               {
-                title.length < 2 && (
+                !titleIsValid && (
                   <Text style={{ color: 'maroon' }}>Please enter a valid Title</Text>
                 )
               }
@@ -72,11 +94,11 @@ const EditProductScreen = (props) => {
               <TextInput keyboardType="decimal-pad" 
                 style={styles.input} 
                 value={price.toString()} 
-                onChangeText={input=>setPrice(input)} 
+                onChangeText={priceChangeHandler} 
                 clearButtonMode="while-editing"
               />
               {
-                price.length < 1 && (
+                !priceIsValid && (
                   <Text style={{ color: 'maroon' }}>Price must be great than $1 USD</Text>
                 )
               }
