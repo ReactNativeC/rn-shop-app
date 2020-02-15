@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCa, useCallback } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform} from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, Alert} from 'react-native';
 import { useDispatch, useSelector  } from 'react-redux';
 import * as productActions from '../../store/actions/products';
 import * as cartActions from '../../store/actions/cart';
@@ -19,6 +19,11 @@ const EditProductScreen = (props) => {
   const [description, setDescription] = useState(editedProduct? editedProduct.description: '');
 
   const submitHandler = useCallback(() => {
+    if(title.length < 2 || price < 1)
+    {
+      Alert.alert("Invalid", "Please correct all issues before proceeding!",[{title:"OK"} ])
+      return;
+    }
     editedProduct ?
       dispatch(productActions.editProduct(new Product(editedProduct.id, editedProduct.ownerId, title, imageUrl, description, parseFloat(parseFloat(price).toFixed(2)))))
       :
@@ -44,6 +49,11 @@ const EditProductScreen = (props) => {
                 clearButtonMode="while-editing"      
                 autoCapitalize="sentences"                    
               />
+              {
+                title.length < 2 && (
+                  <Text style={{ color: 'maroon' }}>Please enter a valid Title</Text>
+                )
+              }
             </View>
 
             <View style={styles.formControl}>
@@ -52,6 +62,8 @@ const EditProductScreen = (props) => {
                 value={imageUrl} 
                 onChangeText={input=>setImageUrl(input)} 
                 clearButtonMode="while-editing" 
+                keyboardType=""
+                autoCapitalize="none"
               />
             </View>
 
@@ -63,14 +75,18 @@ const EditProductScreen = (props) => {
                 onChangeText={input=>setPrice(input)} 
                 clearButtonMode="while-editing"
               />
+              {
+                price.length < 1 && (
+                  <Text style={{ color: 'maroon' }}>Price must be great than $1 USD</Text>
+                )
+              }
             </View>
 
             <View style={styles.formControl}>
               <Text style={styles.titleText}>Description</Text>
               <TextInput style={styles.input} 
                 value={description} 
-                onChangeText={input=>setDescription(input)} 
-                multiline                
+                onChangeText={input=>setDescription(input)}                           
                 blurOnSubmit
                 clearButtonMode="while-editing"     
                 returnKeyType="done"                                                                     
