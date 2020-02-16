@@ -5,6 +5,7 @@ import * as productActions from '../../store/actions/products';
 import Product from '../../model/product';
 import HeaderButton  from '../../components/UI/HeaderButton';
 import { HeaderButtons, Item} from 'react-navigation-header-buttons';
+import Input from '..//../components/UI/Input';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -56,19 +57,14 @@ const EditProductScreen = (props) => {
     formIsValid: editedProduct ? true : false
   })
   
-  const textChangeHandler = (inputIdentifier, text) => {
-    let isValid = false;    
-    if(text.trim().length > 0) {
-      isValid = true;
-    }
-   
+  const inputChangeHandler = useCallback((inputIdentifier, inputValue, inputValidity) => {
     dispatchFormState({
       type: FORM_INPUT_UPDATE, 
-      value: text, 
-      isValid: isValid, 
+      value: inputValue, 
+      isValid: inputValidity, 
       input: inputIdentifier
     })   
-  }
+  },[dispatchFormState])
 
   const submitHandler = useCallback(() => {
     if(!formState.formIsValid)
@@ -105,70 +101,54 @@ const EditProductScreen = (props) => {
       <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={60}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.form}>
-            <View style={styles.formControl}>
-              <Text style={styles.titleText}>Title</Text>
-              <TextInput 
-                style={formState.inputValidities.title? styles.input: styles.inputRed} 
-                value={formState.inputValues.title} 
-                onChangeText={textChangeHandler.bind(this, 'title')}
-                clearButtonMode="while-editing"      
-                autoCapitalize="sentences"                    
-              />
-              {
-                !formState.inputValidities.title && (
-                  <Text style={{ color: 'maroon' }}>Title is required!</Text>
-                )
-              }
-            </View>
-
-            <View style={styles.formControl}>
-              <Text style={styles.titleText}>Image Url</Text>
-              <TextInput 
-                style={formState.inputValidities.imageUrl? styles.input: styles.inputRed} 
-                value={formState.inputValues.imageUrl} 
-                onChangeText={textChangeHandler.bind(this, 'imageUrl')} 
-                clearButtonMode="while-editing" 
-                keyboardType=""
-                autoCapitalize="none"
-              />
-              {
-                !formState.inputValidities.imageUrl && (
-                  <Text style={{ color: 'maroon' }}>Image Url is required!</Text>
-                )
-              }
-            </View>
-
-            <View style={styles.formControl}>
-              <Text style={styles.titleText}>Price</Text>            
-              <TextInput keyboardType="decimal-pad" 
-                style={formState.inputValidities.price? styles.input: styles.inputRed} 
-                value={formState.inputValues.price.toString()} 
-                onChangeText={textChangeHandler.bind(this, 'price')} 
-                clearButtonMode="while-editing"
-              />
-              {
-                !formState.inputValidities.price && (
-                  <Text style={{ color: 'maroon' }}>Price is required!</Text>
-                )
-              }
-            </View>
-
-            <View style={styles.formControl}>
-              <Text style={styles.titleText}>Description</Text>
-              <TextInput 
-                style={formState.inputValidities.description? styles.input: styles.inputRed} 
-                value={formState.inputValues.description} 
-                onChangeText={textChangeHandler.bind(this, 'description')}                           
-                blurOnSubmit
-                clearButtonMode="while-editing"     
-                returnKeyType="done"                                                                     
-              />
-              {
-                !formState.inputValidities.description && (
-                  <Text style={{ color: 'maroon' }}>description is required!</Text>
-                )
-              }
-            </View>    
+            <Input
+              id="title"
+              label='Title'
+              errorText= 'Please enter valid Title'   
+              returnKeyType="next"  
+              onInputChanged={inputChangeHandler}    
+              initialValue={editedProduct?editedProduct.title: ''} 
+              initiallyValid={!!editedProduct}
+              required
+            />
+            <Input
+              id="imageUrl"
+              label='Image Url'
+              errorText= 'Please enter valid Image Url'              
+              autoCapitalize="none"
+              returnKeyType="next"
+              onInputChanged={inputChangeHandler}    
+              initialValue={editedProduct?editedProduct.imageUrl: ''} 
+              initiallyValid={!!editedProduct}              
+            />
+            <Input
+              id="price"
+              label='Price'
+              errorText= ' Please enter valid Price'              
+              autoCapitalize="none"
+              keyboardVerticalOffset="decimal-pad"
+              returnKeyType="next"
+              onInputChanged={inputChangeHandler}    
+              initialValue={editedProduct?editedProduct.price: ''} 
+              initiallyValid={!!editedProduct}
+              required
+              min={1}
+            />
+            <Input
+              id="description"
+              label='Description'
+              errorText= 'Please enter valid Description'         
+              returnKeyType="done"    
+              autoCapitalize="sentences"  
+              autoCorrect
+              multiline
+              numberOfLines={3}      
+              onInputChanged={inputChangeHandler}    
+              initialValue={editedProduct?editedProduct.description: ''} 
+              initiallyValid={!!editedProduct}  
+              required
+              minLength={5}            
+            />     
           </View>          
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -180,26 +160,7 @@ const styles = StyleSheet.create({
   form: {
     margin: 20,
   },
-  formControl:{
-    marginVertical: 25,
-  },
-  titleText:{
-    fontSize: 18,
-    fontFamily: 'Roboto-Bold',
-    marginBottom: 20,    
-  },
-  input: {
-    fontSize: 18, 
-    fontFamily: 'Roboto',
-    borderBottomColor: 'black',
-    borderBottomWidth: 0.5,
-  },
-  inputRed: {
-    fontSize: 18, 
-    fontFamily: 'Roboto',
-    borderBottomColor: 'red',
-    borderBottomWidth: 0.5,
-  }
+ 
 })
 
 
@@ -207,7 +168,7 @@ EditProductScreen.navigationOptions = navData => {
   const title = navData.navigation.getParam("title");
   const submitFunc = navData.navigation.getParam('submitFunc');
   return  {
-    headerTitle: title? title : "Add New Product",
+    headerTitle: title? title : "Add Product",
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item title='Add' iconSize={30} iconName={Platform.OS === 'android'? 'md-checkmark' : 'ios-checkmark'} onPress={submitFunc} />
