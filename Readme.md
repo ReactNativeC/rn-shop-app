@@ -14,4 +14,9 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 npm install --save react-navigation-drawer
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
+npm install --save uiid
+
+npm install --save moment
+
+npm install --save redux-thunk
 

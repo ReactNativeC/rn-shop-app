@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import ProductsOverviewScreen from './screens/shop/ProductsOverviewScreen';
-import { createStore, combineReducers, compose} from 'redux';
+import { createStore, combineReducers, applyMiddleware} from 'redux';
+import ReduxThunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
@@ -20,10 +21,10 @@ const rootReducer = combineReducers({
 })
 
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 //TODO --this is for development debugging only. remove "composeWithDevTools" argument to the creatStore function when deploying to prod.
-//const store = createStore(rootReducer, composeWithDevTools());
+//const store = createStore(rootReducer, applyMiddleware(ReduxThunk), composeWithDevTools());
 
 const fetchFonts = () => {
   return Font.loadAsync({
