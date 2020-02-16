@@ -108,7 +108,7 @@ const EditProductScreen = (props) => {
             <View style={styles.formControl}>
               <Text style={styles.titleText}>Title</Text>
               <TextInput 
-                style={styles.input} 
+                style={formState.inputValidities.title? styles.input: styles.inputRed} 
                 value={formState.inputValues.title} 
                 onChangeText={textChangeHandler.bind(this, 'title')}
                 clearButtonMode="while-editing"      
@@ -116,46 +116,58 @@ const EditProductScreen = (props) => {
               />
               {
                 !formState.inputValidities.title && (
-                  <Text style={{ color: 'maroon' }}>Please enter a valid Title</Text>
+                  <Text style={{ color: 'maroon' }}>Title is required!</Text>
                 )
               }
             </View>
 
             <View style={styles.formControl}>
               <Text style={styles.titleText}>Image Url</Text>
-              <TextInput style={styles.input} 
+              <TextInput 
+                style={formState.inputValidities.imageUrl? styles.input: styles.inputRed} 
                 value={formState.inputValues.imageUrl} 
                 onChangeText={textChangeHandler.bind(this, 'imageUrl')} 
                 clearButtonMode="while-editing" 
                 keyboardType=""
                 autoCapitalize="none"
               />
+              {
+                !formState.inputValidities.imageUrl && (
+                  <Text style={{ color: 'maroon' }}>Image Url is required!</Text>
+                )
+              }
             </View>
 
             <View style={styles.formControl}>
               <Text style={styles.titleText}>Price</Text>            
               <TextInput keyboardType="decimal-pad" 
-                style={styles.input} 
+                style={formState.inputValidities.price? styles.input: styles.inputRed} 
                 value={formState.inputValues.price.toString()} 
                 onChangeText={textChangeHandler.bind(this, 'price')} 
                 clearButtonMode="while-editing"
               />
               {
                 !formState.inputValidities.price && (
-                  <Text style={{ color: 'maroon' }}>Price must be great than $1 USD</Text>
+                  <Text style={{ color: 'maroon' }}>Price is required!</Text>
                 )
               }
             </View>
 
             <View style={styles.formControl}>
               <Text style={styles.titleText}>Description</Text>
-              <TextInput style={styles.input} 
+              <TextInput 
+                style={formState.inputValidities.description? styles.input: styles.inputRed} 
                 value={formState.inputValues.description} 
                 onChangeText={textChangeHandler.bind(this, 'description')}                           
                 blurOnSubmit
                 clearButtonMode="while-editing"     
                 returnKeyType="done"                                                                     
               />
+              {
+                !formState.inputValidities.description && (
+                  <Text style={{ color: 'maroon' }}>description is required!</Text>
+                )
+              }
             </View>    
           </View>          
         </TouchableWithoutFeedback>
@@ -180,6 +192,12 @@ const styles = StyleSheet.create({
     fontSize: 18, 
     fontFamily: 'Roboto',
     borderBottomColor: 'black',
+    borderBottomWidth: 0.5,
+  },
+  inputRed: {
+    fontSize: 18, 
+    fontFamily: 'Roboto',
+    borderBottomColor: 'red',
     borderBottomWidth: 0.5,
   }
 })
