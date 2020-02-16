@@ -80,7 +80,7 @@ const EditProductScreen = (props) => {
         formState.inputValues.title, 
         formState.inputValues.imageUrl, 
         formState.inputValues.description, 
-        parseFloat(parseFloat(formState.inputValues.price).toFixed(2)))))
+        +formState.inputValues.price)))
       :
       dispatch(productActions.addProduct(new Product(
         1, 
@@ -88,7 +88,7 @@ const EditProductScreen = (props) => {
         formState.inputValues.title, 
         formState.inputValues.imageUrl, 
         formState.inputValues.description, 
-        parseFloat(parseFloat(formState.inputValues.price).toFixed(2)))))          
+        +formState.inputValues.price)))          
       props.navigation.goBack();
   },[dispatch, editedProduct, formState])
 
@@ -97,39 +97,39 @@ const EditProductScreen = (props) => {
   }, [submitHandler])    
 
   return (
-    <ScrollView>
-      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={60}>
+    <KeyboardAvoidingView  behavior="position" keyboardVerticalOffset={50}>
+      <ScrollView>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.form}>
             <Input
               id="title"
               label='Title'
-              errorText= 'Please enter valid Title'   
-              returnKeyType="next"  
-              onInputChanged={inputChangeHandler}    
-              initialValue={editedProduct?editedProduct.title: ''} 
+              errorText='Please enter valid Title'
+              returnKeyType="next"
+              onInputChanged={inputChangeHandler}
+              initialValue={editedProduct ? editedProduct.title : ''}
               initiallyValid={!!editedProduct}
               required
             />
             <Input
               id="imageUrl"
               label='Image Url'
-              errorText= 'Please enter valid Image Url'              
+              errorText='Please enter valid Image Url'
               autoCapitalize="none"
               returnKeyType="next"
-              onInputChanged={inputChangeHandler}    
-              initialValue={editedProduct?editedProduct.imageUrl: ''} 
-              initiallyValid={!!editedProduct}              
+              onInputChanged={inputChangeHandler}
+              initialValue={editedProduct ? editedProduct.imageUrl : ''}
+              initiallyValid={!!editedProduct}
             />
             <Input
               id="price"
               label='Price'
-              errorText= ' Please enter valid Price'              
+              errorText=' Please enter valid Price'
               autoCapitalize="none"
               keyboardVerticalOffset="decimal-pad"
               returnKeyType="next"
-              onInputChanged={inputChangeHandler}    
-              initialValue={editedProduct?editedProduct.price: ''} 
+              onInputChanged={inputChangeHandler}
+              initialValue={editedProduct ? editedProduct.price.toString() : ''}
               initiallyValid={!!editedProduct}
               required
               min={1}
@@ -137,22 +137,22 @@ const EditProductScreen = (props) => {
             <Input
               id="description"
               label='Description'
-              errorText= 'Please enter valid Description'         
-              returnKeyType="done"    
-              autoCapitalize="sentences"  
+              errorText='Please enter valid Description'
+              returnKeyType="done"
+              autoCapitalize="sentences"
               autoCorrect
               multiline
-              numberOfLines={3}      
-              onInputChanged={inputChangeHandler}    
-              initialValue={editedProduct?editedProduct.description: ''} 
-              initiallyValid={!!editedProduct}  
+              numberOfLines={3}
+              onInputChanged={inputChangeHandler}
+              initialValue={editedProduct ? editedProduct.description : ''}
+              initiallyValid={!!editedProduct}
               required
-              minLength={5}            
-            />     
-          </View>          
+              minLength={5}
+            />
+          </View>
         </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

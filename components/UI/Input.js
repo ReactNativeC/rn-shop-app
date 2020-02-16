@@ -67,15 +67,17 @@ const Input = props => {
       <Text style={styles.titleText}>{props.label}</Text>
       <TextInput
         {...props}          
-        style={inputState.isValid ? styles.input : styles.inputRed}
+        style={!inputState.isValid && inputState.touched ? styles.inputRed : styles.input}
         value={inputState.value}
         onChangeText={textChangeHandler} 
         onBlur={lostFocusHandler}
-        clearButtonMode="while-editing"       
+        clearButtonMode="while-editing"             
       />
       {
-        !inputState.isValid && (
-          <Text style={{ color: 'maroon' }}>{props.errorText}</Text>
+        !inputState.isValid &&  inputState.touched && (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{props.errorText}</Text>
+          </View>
         )
       }
     </View>
@@ -102,6 +104,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     borderBottomColor: 'red',
     borderBottomWidth: 0.5,
+  }, 
+  errorContainer: {
+    marginTop: 5    
+  },
+  errorText: {
+    fontFamily:'Roboto',
+    fontSize: 13,
+    color:'red'
   }
 });
 
