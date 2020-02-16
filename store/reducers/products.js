@@ -9,6 +9,11 @@ const initialState = {
 
 export default (state = initialState, action) => {    
   switch(action.type) {
+    case productActions.SET_PRODUCTS:
+      return {
+        availableProducts: action.products, 
+        userProducts: action.products.filter(product => product.ownerId === "u1")
+      }
     case productActions.DELETE_PRODUCT :      
       const updatedUserProducts = state.userProducts.filter(product => product.id !== action.productId);
       const updatedAvailableProducts = state.availableProducts.filter(product => product.id !== action.productId);      
