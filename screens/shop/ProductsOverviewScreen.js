@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { FlatList,View, Button, Platform, ActivityIndicator, StyleSheet } from 'react-native';
+import { FlatList,View, Text, Button, Platform, ActivityIndicator, StyleSheet } from 'react-native';
 import { useSelector, useDispatch  } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import * as cartActions from '../../store/actions/cart';
@@ -11,24 +11,39 @@ import Colors from '../../constants/colors';
 const ProductsOverviewScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.availableProducts)
   const [isLoadingData, setIsLoadingData] = useState(false);
+  const [error, setError] = useState('');
+
   const dispatch = useDispatch(); 
 
- 
-  useEffect(() => {    
-    const loadProducts = async () => {
-      setIsLoadingData(true);
+  const loadProducts = useCallback(async () => {
+    setError(null);
+    setIsLoadingData(true);
+    try {
       await dispatch(productActions.fetchProducts())
-      setIsLoadingData(false)
+    } catch(err) {
+      setError(err.message);
     }
-
+    setIsLoadingData(false);      
+  },[dispatch, setIsLoadingData, setError])
+  
+  useEffect(() => {    
     loadProducts();
-  }, [dispatch])
+  }, [dispatch, loadProducts])
 
   const onDetails = (id, title) => {
     props.navigation.navigate('ProductDetails', {
       productId: id, 
       title: title
     })
+  }
+
+  if(error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{error}</Text>
+        <Button title="Try Again!" onPress={loadProducts} />
+      </View>
+    );
   }
 
   if(isLoadingData) {
@@ -39,6 +54,13 @@ const ProductsOverviewScreen = (props) => {
     );
   }
 
+  if(!isLoadingData && PRODUCTS.length ===0) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>No Products found! Why don't you add some!</Text>        
+      </View>
+    )
+  }
 
   const renderProductItem = itemData => {
     return (<ProductItem 
@@ -83,6 +105,11 @@ const styles = StyleSheet.create({
     flex: 1, 
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  errorText:{
+    fontSize: 'Roboto',
+    fontSize: 16,
+    color: 'red'
   }
 });
 

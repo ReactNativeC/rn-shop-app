@@ -7,26 +7,36 @@ import Product from '../../model/product';
 
 export const fetchProducts = () => {
   return async dispatch => {
-    //Get products from database
-    const response = await fetch(Config.database + '/products.json');
-    const resData = await response.json();
-    let loadedProducts = [];
-    for(const key in resData) {
-      loadedProducts.push(new Product(
-        key, 
-        "u1",
-        resData[key].title, 
-        resData[key].imageUrl,
-        resData[key].description,
-        resData[key].price
-        )      
-      );
-    }         
-    dispatch({
-      type: SET_PRODUCTS,
-      products: loadedProducts
-    })
-  }  
+    try {
+      //Get products from database
+      const response = await fetch(Config.database + '/products.json');
+      //if there is authentication issues or any other issues, firebase may not throw the error but just return a a non-200 code 
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+
+      const resData = await response.json();
+      let loadedProducts = [];
+      for (const key in resData) {
+        loadedProducts.push(new Product(
+          key,
+          "u1",
+          resData[key].title,
+          resData[key].imageUrl,
+          resData[key].description,
+          resData[key].price
+        )
+        );
+      }
+      dispatch({
+        type: SET_PRODUCTS,
+        products: loadedProducts
+      })
+    } catch (err) {
+      //send the error to analytics/logs
+      throw err;
+    }
+  }
 }
 
 export const deleteProduct = id => {
