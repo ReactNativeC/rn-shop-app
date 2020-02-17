@@ -1,24 +1,27 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Text, FlatList, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
 import OrderItem from '../../components/shop/OrderItem';
+import * as OrderActions from '../../store/actions/order';
 
 const OrdersScreen = props => {
-  const orders = useSelector(state => {
-    const transformedOrders = []; 
-    for(const key in state.order.orders)
-    {
-      transformedOrders.push({
-        orderId: key, 
-        cartItems: state.order.orders[key].cartItems, 
-        totalAmount: state.order.orders[key].totalAmount,
-        date: state.order.orders[key].readableDate
-      });
-    }
-    return transformedOrders.sort((a,b) => a.key < b.key ? 1 : -1);
-  });
+  const dispatch = useDispatch();
+  // const orders = useSelector(state => {
+  //   const transformedOrders = []; 
+  //   for(const key in state.order.orders)
+  //   {
+  //     transformedOrders.push({
+  //       orderId: key, 
+  //       cartItems: state.order.orders[key].cartItems, 
+  //       totalAmount: state.order.orders[key].totalAmount,
+  //       date: state.order.orders[key].readableDate
+  //     });
+  //   }
+  //   return transformedOrders.sort((a,b) => a.key < b.key ? 1 : -1);
+  // });
+  const orders = useSelector(state => state.order.orders);
   
   const renderOrderItem  = (itemData) => {    
     return (<OrderItem 
@@ -29,6 +32,16 @@ const OrdersScreen = props => {
     />
     )
   }
+
+  const loadOrders = useCallback(async () => {
+    await dispatch(OrderActions.fetchOrders())    
+  },[dispatch, OrderActions.fetchOrders])
+
+  useEffect(() => {
+    loadOrders();
+    console.log("loadOrders() completed")
+    console.log(orders)
+  }, [dispatch, loadOrders])
 
   return (
     <FlatList 

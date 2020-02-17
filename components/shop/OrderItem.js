@@ -3,6 +3,7 @@ import { View, Text, Button, StyleSheet, FlatList, Platform, TouchableOpacity } 
 import CartItem from '../../components/shop/CartItem';
 import Colors from '../../constants/colors';
 import Card from '../../components/UI/Card';
+import uuid from 'uuid';
 
 const OrderItem = props => {  
   const [showDetails, setShowDetails]= useState(false);
@@ -43,9 +44,9 @@ const OrderItem = props => {
         </View>
         { showDetails && 
         <View>
-          <FlatList 
-            data={cartItemsArray}
+          <FlatList             
             keyExtractor={item => item.id}
+            data={cartItemsArray}            
             renderItem={renderCartItem}
             showsVerticalScrollIndicator={false}
           />

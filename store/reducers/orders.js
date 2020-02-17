@@ -5,8 +5,12 @@ const initialState = {
   orders: []
 }
 
-export default (state = initialState, action) => {    
+export default (state = initialState, action) => {      
   switch(action.type){
+    case orderActions.SET_ORODERS:   
+      return {
+        orders: action.orders
+      }
     case orderActions.PLACE_AN_ORDER:
       const newOrder = new Order(
         action.orderData.id, 
