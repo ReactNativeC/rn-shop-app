@@ -9,7 +9,6 @@ import HeaderButton from '../../components/UI/HeaderButton';
 import Colors from '../../constants/colors';
 
 const ProductsOverviewScreen = (props) => {
-  console.log('strat of overview screen')
   const PRODUCTS = useSelector(state => state.products.availableProducts)
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [error, setError] = useState('');
@@ -17,7 +16,6 @@ const ProductsOverviewScreen = (props) => {
   const dispatch = useDispatch(); 
 
   const loadProducts = useCallback(async () => {
-    console.log('loading products')
     setError(null);
     setIsLoadingData(true);
     try {
@@ -33,6 +31,9 @@ const ProductsOverviewScreen = (props) => {
   // }, [dispatch, loadProducts])
 
   useEffect(() => {
+    //components in a drawer navigator are created initially and are not recreted/rerendered when moving between diffrent screens. hence 
+    //if the data is updated on the server, the data will not be refreshed. that's why we need to add a listener 
+    //willFocus event triggers when the transition is started
     const willFocusSubscription = navigation.addListener('willFocus',loadProducts);
     
     //cleanup - unsubscribe. 
