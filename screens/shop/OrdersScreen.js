@@ -11,6 +11,7 @@ const OrdersScreen = props => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading]= useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
   const orders = useSelector(state => {
     return state.order.orders.sort((a,b) => a.date < b.date ? 1: -1);
@@ -27,20 +28,25 @@ const OrdersScreen = props => {
   }
 
   const loadOrders = useCallback(async () => {
-    setIsLoading(true);
+    setIsRefreshing(true);
     setError(null);
     try {
       await dispatch(OrderActions.fetchOrders()); 
     } catch(err) {
       setError(err.message);
     }
-    
-    setIsLoading(false);
-  },[dispatch, OrderActions.fetchOrders])
+    setIsRefreshing(false);
+  },[dispatch, setError,setIsRefreshing])
 
   useEffect(() => {
-    const loadSubscription = props.navigation.addListener('willFocus', loadOrders);
-    
+    setIsLoading(true);
+    loadOrders().then(()=> {
+      setIsLoading(false);
+    })
+  },[dispatch, loadOrders, setIsLoading])
+
+  useEffect(() => {
+    const loadSubscription = props.navigation.addListener('willFocus', loadOrders);    
     //cleanup. unsubscribe willFocus event when component is unmounted or destored
     return () => {
       loadSubscription.remove();
@@ -67,7 +73,7 @@ const OrdersScreen = props => {
   return (
     <FlatList 
       onRefresh={loadOrders}
-      refreshing={isLoading}
+      refreshing={isRefreshing}
       data={orders}
       keyExtractor={item => item.orderId}
       renderItem={renderOrderItem}
