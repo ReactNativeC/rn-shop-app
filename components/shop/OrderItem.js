@@ -44,7 +44,8 @@ const OrderItem = props => {
         </View>
         { showDetails && 
         <View>
-          <FlatList             
+          <FlatList 
+            listKey={uuid.id}
             keyExtractor={item => item.id}
             data={cartItemsArray}            
             renderItem={renderCartItem}
