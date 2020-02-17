@@ -1,11 +1,12 @@
-import React, { useEffect, useCallback, useReducer } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, Alert} from 'react-native';
+import React, { useEffect, useCallback, useReducer, useState } from 'react';
+import { View, Text, ActivityIndicator, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, Alert} from 'react-native';
 import { useDispatch, useSelector  } from 'react-redux';
 import * as productActions from '../../store/actions/products';
 import Product from '../../model/product';
 import HeaderButton  from '../../components/UI/HeaderButton';
 import { HeaderButtons, Item} from 'react-navigation-header-buttons';
 import Input from '..//../components/UI/Input';
+import Colors from '../../constants/colors';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -40,6 +41,8 @@ const EditProductScreen = (props) => {
   const dispatch = useDispatch();
   const productId = props.navigation.getParam("productId");
   const editedProduct = useSelector(state=> state.products.availableProducts.find(product => product.id === productId)); 
+  const [error, setError] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
  
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -66,35 +69,58 @@ const EditProductScreen = (props) => {
     })   
   },[dispatchFormState])
 
-  const submitHandler = useCallback(() => {
+  const submitHandler = useCallback( async () => {        
     if(!formState.formIsValid)
     {
       Alert.alert("Wrong Input", "Please correct issues on the screen!",[{title:"OK"} ])
       return;
     }
+    try {
+      setIsProcessing(true);
+      setError(null);
 
-    editedProduct ?
-      dispatch(productActions.editProduct(new Product(
-        editedProduct.id, 
-        editedProduct.ownerId, 
-        formState.inputValues.title, 
-        formState.inputValues.imageUrl, 
-        formState.inputValues.description, 
-        +formState.inputValues.price)))
-      :
-      dispatch(productActions.addProduct(new Product(
-        1, 
-        "u1", 
-        formState.inputValues.title, 
-        formState.inputValues.imageUrl, 
-        formState.inputValues.description, 
-        +formState.inputValues.price)))          
-      props.navigation.goBack();
+      editedProduct ?        
+        await dispatch(productActions.editProduct(new Product(
+          editedProduct.id,
+          editedProduct.ownerId,
+          formState.inputValues.title,
+          formState.inputValues.imageUrl,
+          formState.inputValues.description,
+          +formState.inputValues.price)))
+        :
+        await dispatch(productActions.addProduct(new Product(
+          1,
+          "u1",
+          formState.inputValues.title,
+          formState.inputValues.imageUrl,
+          formState.inputValues.description,
+          +formState.inputValues.price)))              
+        
+        props.navigation.goBack();    
+    } catch (err) {       
+      setError(err.message);
+    }
+    setIsProcessing(false); 
   },[dispatch, editedProduct, formState])
 
   useEffect(() => {
     props.navigation.setParams({submitFunc: submitHandler});
-  }, [submitHandler])    
+  }, [submitHandler])  
+  
+  useEffect(() => {
+    if(error) {
+      Alert.alert("Error", error, [{title:"OK", style:"cancel"}])
+    }
+  }, [error])
+
+  
+  if(isProcessing) {
+    return (
+    <View style={styles.centered}>
+      <ActivityIndicator size="large" color={Colors.primaryColor} />  
+    </View>
+    )
+  }
 
   return (
     <KeyboardAvoidingView  behavior="position" keyboardVerticalOffset={50}>
@@ -162,7 +188,16 @@ const styles = StyleSheet.create({
   form: {
     margin: 20,
   },
- 
+  centered: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  errorText:{
+    fontSize: 'Roboto',
+    fontSize: 16,
+    color: 'red'
+  }
 })
 
 

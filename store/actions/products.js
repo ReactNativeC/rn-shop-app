@@ -41,46 +41,63 @@ export const fetchProducts = () => {
 
 export const deleteProduct = id => {
   return async dispatch => {
-    //delete from server before dispatching delete action to redux
-    const response = await fetch(`${Config.database}/products/${id}.json`, {
-      method: 'DELETE',     
-    })   
+    try {
+      //delete from server before dispatching delete action to redux
+      const response = await fetch(`${Config.database}/products/${id}.json`, {
+        method: 'DELETE',
+      })
+      if(!response.ok)
+        throw new Error("Something went wrong");
 
-    dispatch({
-      type: DELETE_PRODUCT, 
-      productId: id
-    })
+      dispatch({
+        type: DELETE_PRODUCT,
+        productId: id
+      })
+    } catch (err) {
+      throw err;
+    }
   }
 }
 
 export const addProduct = product => {
   return async  dispatch => {
-    //any async action to udpate database goes here
-    const response = await fetch(`${Config.database}/products.json`, {
-      method: 'POST', 
-      headers: {
-        'Content-Type': 'application/json',        
-      }, 
-      body: JSON.stringify({
-        title: product.title, 
-        description: product.description, 
-        imageUrl: product.imageUrl, 
-        price: product.price, 
-        ownerId: product.ownerId,
+    try {
+      //any async action to udpate database goes here
+      const response = await fetch(`${Config.database}/products.jon`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: product.title,
+          description: product.description,
+          imageUrl: product.imageUrl,
+          price: product.price,
+          ownerId: product.ownerId,
+        })
       })
-    })    
-    const resData = await response.json();
-    product.id = resData.name;
-    
-    dispatch({
-      type: ADD_PRODUCT, 
-      product: product
-    })
+      //even if we receive authentication 401 or some other non-OK(200) error, let the user know.
+      if(!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+
+      const resData = await response.json();
+      product.id = resData.name;
+
+      dispatch({
+        type: ADD_PRODUCT,
+        product: product
+      })
+    } catch (err) {
+      //Log it an analytics server
+      throw err;
+    }
   }  
 }
 
 export const editProduct = product => {
   return async dispatch => {
+    try {
     //update database first before dispatcing action    
     //PATCH HTTP method only updates attributes that we specify in the body payload
     const response = await fetch(`${Config.database}/products/${product.id}.json`, {
@@ -93,12 +110,19 @@ export const editProduct = product => {
         description: product.description, 
         imageUrl: product.imageUrl, 
       })
-    })    
-  
+    })        
+    //even if we receive authentication 401 or some other non-OK(200) error, let the user know.
+    if (!response.ok) {
+      throw new Error("Something went wrong!");
+    }
     dispatch({
       type: EDIT_PRODUCT, 
       product: product
-    })    
+    })   
+  } catch(err) {
+    //Log it to analytics server
+    throw err;
+  } 
   }
   
 }

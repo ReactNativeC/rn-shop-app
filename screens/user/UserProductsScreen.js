@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, View, Platform, Button, Dimensions , StyleSheet, Alert} from 'react-native';
 import { useSelector, useDispatch  } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
@@ -9,7 +9,7 @@ import Colors from '../../constants/colors';
 const UserProductsScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.userProducts)
   const dispatch = useDispatch(); 
-
+  const [error, setError] = useState(null);
   const onDetails = (id, title) => {
     props.navigation.navigate('EditProduct', {
       productId: id, 
@@ -17,11 +17,23 @@ const UserProductsScreen = (props) => {
     })
   };
 
+  useEffect(() => {
+    if(error) {
+      Alert.alert("Error", error, [{title:"OK", style:"cancel"}])
+    }
+  }, [error])
+
   const deleteHandler = (id) => {
     Alert.alert("Are you sure!", 
                 "Do you really want to delete this item?",
                 [           
-                  {text:'Yes', style:'destructive', onPress:()=>dispatch(productActions.deleteProduct(id))},   
+                  {text:'Yes', style:'destructive', onPress:()=> {
+                    try {
+                      dispatch(productActions.deleteProduct(id))
+                    } catch(err) {                      
+                      Alert.alert("Error", err.message, [{title:'OK', style:'Cancel'}])
+                    }
+                  }},   
                   {text:'No', style:'cancel'}               
                 ]);
     }
