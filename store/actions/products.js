@@ -40,16 +40,23 @@ export const fetchProducts = () => {
 }
 
 export const deleteProduct = id => {
-  return {
-    type: DELETE_PRODUCT, 
-    productId: id
+  return async dispatch => {
+    //delete from server before dispatching delete action to redux
+    const response = await fetch(`${Config.database}/products/${id}.json`, {
+      method: 'DELETE',     
+    })   
+
+    dispatch({
+      type: DELETE_PRODUCT, 
+      productId: id
+    })
   }
 }
 
 export const addProduct = product => {
   return async  dispatch => {
-    //ansy async action here
-    const response = await fetch(Config.database +'/products.json', {
+    //any async action to udpate database goes here
+    const response = await fetch(`${Config.database}/products.json`, {
       method: 'POST', 
       headers: {
         'Content-Type': 'application/json',        
@@ -73,8 +80,25 @@ export const addProduct = product => {
 }
 
 export const editProduct = product => {
-  return {
-    type: EDIT_PRODUCT, 
-    product: product
+  return async dispatch => {
+    //update database first before dispatcing action    
+    //PATCH HTTP method only updates attributes that we specify in the body payload
+    const response = await fetch(`${Config.database}/products/${product.id}.json`, {
+      method: 'PATCH', 
+      headers: {
+        'Content-Type': 'application/json',        
+      }, 
+      body: JSON.stringify({
+        title: product.title, 
+        description: product.description, 
+        imageUrl: product.imageUrl, 
+      })
+    })    
+  
+    dispatch({
+      type: EDIT_PRODUCT, 
+      product: product
+    })    
   }
+  
 }
