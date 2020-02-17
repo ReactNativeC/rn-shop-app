@@ -9,13 +9,15 @@ import HeaderButton from '../../components/UI/HeaderButton';
 import Colors from '../../constants/colors';
 
 const ProductsOverviewScreen = (props) => {
+  console.log('strat of overview screen')
   const PRODUCTS = useSelector(state => state.products.availableProducts)
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [error, setError] = useState('');
-
+  const { navigation } = props;
   const dispatch = useDispatch(); 
 
   const loadProducts = useCallback(async () => {
+    console.log('loading products')
     setError(null);
     setIsLoadingData(true);
     try {
@@ -26,9 +28,19 @@ const ProductsOverviewScreen = (props) => {
     setIsLoadingData(false);      
   },[dispatch, setIsLoadingData, setError])
   
-  useEffect(() => {    
-    loadProducts();
-  }, [dispatch, loadProducts])
+  // useEffect(() => {         
+  //   loadProducts();
+  // }, [dispatch, loadProducts])
+
+  useEffect(() => {
+    const willFocusSubscription = navigation.addListener('willFocus',loadProducts);
+    
+    //cleanup - unsubscribe. 
+    //this runs whenever useEffect is about to re-run or the component is destroyed.
+    return () => {
+      willFocusSubscription.remove();
+    }
+  }, [loadProducts])
 
   const onDetails = (id, title) => {
     props.navigation.navigate('ProductDetails', {
