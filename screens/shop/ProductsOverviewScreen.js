@@ -89,6 +89,8 @@ const ProductsOverviewScreen = (props) => {
   
   return (
     <FlatList
+      onRefresh={loadProducts}
+      refreshing={isLoadingData}
       data={PRODUCTS} 
       keyExtractor={item => item.id}
       renderItem = {renderProductItem} 

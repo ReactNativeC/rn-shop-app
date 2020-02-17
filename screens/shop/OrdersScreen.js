@@ -66,6 +66,8 @@ const OrdersScreen = props => {
 
   return (
     <FlatList 
+      onRefresh={loadOrders}
+      refreshing={isLoading}
       data={orders}
       keyExtractor={item => item.orderId}
       renderItem={renderOrderItem}
