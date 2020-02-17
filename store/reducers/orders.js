@@ -8,7 +8,11 @@ const initialState = {
 export default (state = initialState, action) => {    
   switch(action.type){
     case orderActions.PLACE_AN_ORDER:
-      const newOrder = new Order(new Date().toString(), action.orderData.cartItems, action.orderData.totalAmount, new Date());
+      const newOrder = new Order(
+        action.orderData.id, 
+        action.orderData.cartItems, 
+        action.orderData.totalAmount, 
+        action.orderData.date);
       return {
         ...state.orders, 
         orders: state.orders.concat(newOrder)
