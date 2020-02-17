@@ -8,20 +8,10 @@ import * as OrderActions from '../../store/actions/order';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
-  // const orders = useSelector(state => {
-  //   const transformedOrders = []; 
-  //   for(const key in state.order.orders)
-  //   {
-  //     transformedOrders.push({
-  //       orderId: key, 
-  //       cartItems: state.order.orders[key].cartItems, 
-  //       totalAmount: state.order.orders[key].totalAmount,
-  //       date: state.order.orders[key].readableDate
-  //     });
-  //   }
-  //   return transformedOrders.sort((a,b) => a.key < b.key ? 1 : -1);
-  // });
-  const orders = useSelector(state => state.order.orders);
+  
+  const orders = useSelector(state => {
+    return state.order.orders.sort((a,b) => a.date < b.date ? 1: -1);
+  });
   
   const renderOrderItem  = (itemData) => {    
     return (<OrderItem 
@@ -39,8 +29,6 @@ const OrdersScreen = props => {
 
   useEffect(() => {
     loadOrders();
-    console.log("loadOrders() completed")
-    console.log(orders)
   }, [dispatch, loadOrders])
 
   return (
