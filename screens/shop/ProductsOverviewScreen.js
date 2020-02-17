@@ -11,25 +11,31 @@ import Colors from '../../constants/colors';
 const ProductsOverviewScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.availableProducts)
   const [isLoadingData, setIsLoadingData] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState('');
   const { navigation } = props;
   const dispatch = useDispatch(); 
 
   const loadProducts = useCallback(async () => {
     setError(null);
-    setIsLoadingData(true);
+    setIsRefreshing(true);
     try {
       await dispatch(productActions.fetchProducts())
     } catch(err) {
       setError(err.message);
-    }
-    setIsLoadingData(false);      
+    }          
+    setIsRefreshing(false);
   },[dispatch, setIsLoadingData, setError])
   
-  // useEffect(() => {         
-  //   loadProducts();
-  // }, [dispatch, loadProducts])
+  //this is when the screen loads for first time.
+  useEffect(() => {         
+    setIsLoadingData(true);
+    loadProducts().then(()=> {
+      setIsLoadingData(false);
+    })
+  }, [dispatch, loadProducts])
 
+  //this is for subsequent user visits after the screen is already mounted
   useEffect(() => {
     //components in a drawer navigator are created initially and are not recreted/rerendered when moving between diffrent screens. hence 
     //if the data is updated on the server, the data will not be refreshed. that's why we need to add a listener 
@@ -90,7 +96,7 @@ const ProductsOverviewScreen = (props) => {
   return (
     <FlatList
       onRefresh={loadProducts}
-      refreshing={isLoadingData}
+      refreshing={isRefreshing}
       data={PRODUCTS} 
       keyExtractor={item => item.id}
       renderItem = {renderProductItem} 
