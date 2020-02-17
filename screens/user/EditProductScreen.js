@@ -133,8 +133,8 @@ const EditProductScreen = (props) => {
               errorText='Please enter valid Title'
               returnKeyType="next"
               onInputChanged={inputChangeHandler}
-              initialValue={editedProduct ? editedProduct.title : ''}
-              initiallyValid={!!editedProduct}
+              initialValue={formState.inputValues.title}
+              initiallyValid={formState.inputValidities.title}
               required
             />
             <Input
@@ -144,8 +144,8 @@ const EditProductScreen = (props) => {
               autoCapitalize="none"
               returnKeyType="next"
               onInputChanged={inputChangeHandler}
-              initialValue={editedProduct ? editedProduct.imageUrl : ''}
-              initiallyValid={!!editedProduct}
+              initialValue={formState.inputValues.imageUrl}
+              initiallyValid={formState.inputValidities.imageUrl}
             />
             { !editedProduct &&
             <Input
@@ -156,8 +156,8 @@ const EditProductScreen = (props) => {
               keyboardVerticalOffset="decimal-pad"
               returnKeyType="next"
               onInputChanged={inputChangeHandler}
-              initialValue={editedProduct ? editedProduct.price.toString() : ''}
-              initiallyValid={!!editedProduct}
+              initialValue={formState.inputValues.price}
+              initiallyValid={formState.inputValidities.price}
               required
               min={1}
             /> 
@@ -172,8 +172,8 @@ const EditProductScreen = (props) => {
               multiline
               numberOfLines={3}
               onInputChanged={inputChangeHandler}
-              initialValue={editedProduct ? editedProduct.description : ''}
-              initiallyValid={!!editedProduct}
+              initialValue={formState.inputValues.description}
+              initiallyValid={formState.inputValidities.description}
               required
               minLength={5}
             />

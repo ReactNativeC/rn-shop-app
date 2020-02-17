@@ -63,7 +63,7 @@ export const addProduct = product => {
   return async  dispatch => {
     try {
       //any async action to udpate database goes here
-      const response = await fetch(`${Config.database}/products.jon`, {
+      const response = await fetch(`${Config.database}/products.json`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

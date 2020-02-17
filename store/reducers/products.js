@@ -51,7 +51,6 @@ export default (state = initialState, action) => {
       productToBeUpdated.title = updatedProduct.title;
       productToBeUpdated.imageUrl = updatedProduct.imageUrl;
       productToBeUpdated.description = updatedProduct.description;
-      productToBeUpdated.price = updatedProduct.price;
       
       let modifiedUserProducts = [...state.userProducts];
       modifiedUserProducts[indexInUserProducts] = productToBeUpdated;
