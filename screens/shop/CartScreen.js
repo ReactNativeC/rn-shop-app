@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View, Button, StyleSheet, Platform, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, Button, StyleSheet, Platform, FlatList, ActivityIndicator, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as cartActions from '../../store/actions/cart';
 import * as orderActions from '../../store/actions/order';
@@ -8,6 +8,8 @@ import CartItem from '../../components/shop/CartItem';
 
 const CartScreen = props => {
   const dispath = useDispatch();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState(null);
 
   const totalAmount = useSelector(state => state.cart.totalAmount);
   const cartItems = useSelector(state => {
@@ -42,11 +44,35 @@ const CartScreen = props => {
     )
   };
 
+  useEffect(() => {   
+    if(error) {
+    Alert.alert("Error", error, [{title:"OK", style:"cancel"}])
+    }
+  },[error])
+
+  if(isProcessing) {
+    return (
+      <View style="centered">
+        <ActivityIndicator size="large" color={Colors.primaryColor} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.summaryText}>Total: <Text style={styles.amount}>${Math.round(totalAmount.toFixed(2) * 100) / 100}</Text></Text>
-        <Button title="Order Now" color={Colors.accentColor} disabled={cartItems.length ===0} onPress={()=>{ dispath(orderActions.placeAnOrder(cartItems, totalAmount)) }} />
+        <Button title="Order Now" color={Colors.accentColor} disabled={cartItems.length ===0} onPress={ async ()=>
+          { 
+            setIsProcessing(true);
+            setError(null);
+            try {
+              await dispath(orderActions.placeAnOrder(cartItems, totalAmount)) 
+            } catch(err) {
+              setError(err.message);
+            }
+            setIsProcessing(false)
+          }} />
       </View>
       <View style={styles.cartItems}>
         <FlatList 
@@ -93,6 +119,11 @@ const styles = StyleSheet.create({
   }, 
   flatList: {
     height: '100%'
-  }
+  },
+  centered: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 })
 export default CartScreen;

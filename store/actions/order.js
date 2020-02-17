@@ -51,7 +51,6 @@ export const placeAnOrder = (cartItems, totalAmount) => {
           date,
         })
       }); 
-      console.log(response.status);
       if(!response.ok) {
         throw new Error("Something went wrong!");
       }
