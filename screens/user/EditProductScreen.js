@@ -121,6 +121,7 @@ const EditProductScreen = (props) => {
               initialValue={editedProduct ? editedProduct.imageUrl : ''}
               initiallyValid={!!editedProduct}
             />
+            { !editedProduct &&
             <Input
               id="price"
               label='Price'
@@ -133,7 +134,8 @@ const EditProductScreen = (props) => {
               initiallyValid={!!editedProduct}
               required
               min={1}
-            />
+            /> 
+            }
             <Input
               id="description"
               label='Description'
