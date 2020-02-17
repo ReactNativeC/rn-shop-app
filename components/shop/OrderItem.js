@@ -3,11 +3,11 @@ import { View, Text, Button, StyleSheet, FlatList, Platform, TouchableOpacity } 
 import CartItem from '../../components/shop/CartItem';
 import Colors from '../../constants/colors';
 import Card from '../../components/UI/Card';
-import uuid from 'uuid';
 
 const OrderItem = props => {  
   const [showDetails, setShowDetails]= useState(false);
-
+  const uuidv4 = require('uuid/v4');
+  
   const cartItemsArray = []
   for (const key in props.cartItems)
     cartItemsArray.push({
@@ -45,7 +45,7 @@ const OrderItem = props => {
         { showDetails && 
         <View>
           <FlatList 
-            listKey={uuid.id}
+            listKey={uuidv4()}
             keyExtractor={item => item.id}
             data={cartItemsArray}            
             renderItem={renderCartItem}
