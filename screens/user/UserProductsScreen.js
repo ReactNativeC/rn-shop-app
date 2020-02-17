@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, Platform, Button, Dimensions , StyleSheet, Alert} from 'react-native';
+import { FlatList, View, Platform, Button, Dimensions , StyleSheet, Alert, ActivityIndicator} from 'react-native';
 import { useSelector, useDispatch  } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import * as productActions from '../../store/actions/products';
@@ -10,6 +10,7 @@ const UserProductsScreen = (props) => {
   const PRODUCTS = useSelector(state => state.products.userProducts)
   const dispatch = useDispatch(); 
   const [error, setError] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   const onDetails = (id, title) => {
     props.navigation.navigate('EditProduct', {
       productId: id, 
@@ -18,21 +19,23 @@ const UserProductsScreen = (props) => {
   };
 
   useEffect(() => {
-    if(error) {
-      Alert.alert("Error", error, [{title:"OK", style:"cancel"}])
-    }
+    if(error)
+      Alert.alert('Error',error,[{title: 'OK', style:'cancel'}]);
   }, [error])
 
   const deleteHandler = (id) => {
     Alert.alert("Are you sure!", 
                 "Do you really want to delete this item?",
                 [           
-                  {text:'Yes', style:'destructive', onPress:()=> {
+                  {text:'Yes', style:'destructive', onPress: async ()=> {
                     try {
-                      dispatch(productActions.deleteProduct(id))
-                    } catch(err) {                      
-                      Alert.alert("Error", err.message, [{title:'OK', style:'Cancel'}])
+                      setIsProcessing(true);
+                      setError(null)
+                      await dispatch(productActions.deleteProduct(id))
+                    } catch(err) {                                      
+                      setError(err.message);
                     }
+                    setIsProcessing(false);
                   }},   
                   {text:'No', style:'cancel'}               
                 ]);
@@ -57,6 +60,14 @@ const UserProductsScreen = (props) => {
             </ProductItem>)
   }
   
+  if(isProcessing) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={Colors.primaryColor} />
+      </View>
+    )
+  }
+
   return (
     <FlatList
       data={PRODUCTS} 
@@ -86,7 +97,12 @@ UserProductsScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
   button: {
     width: Dimensions.get('window').width / 4,
-  }
+  }, 
+  centered: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 })
 
 export default UserProductsScreen;
