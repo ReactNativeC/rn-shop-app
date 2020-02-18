@@ -20,3 +20,5 @@ npm install --save moment
 
 npm install --save redux-thunk
 
+npm install --save expo-linear-gradient
+
