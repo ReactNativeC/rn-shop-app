@@ -111,7 +111,7 @@ const AuthScreen = props => {
                 <Button title={isSignUp? "Sign up" : "Login"} onPress={authHandler} color={Colors.primaryColor} />
               </View>
               <View style={styles.buttonContainer}>
-                <Button title={isSignUp ? 'Switch to Sign In' : 'Switch to Sign up'} onPress={() => { setIsSignUp(state => !state) }} color={Colors.accentColor} />
+                <Button title={`Switch to ${isSignUp? 'Sign Up' : 'Sign In'}`} onPress={() => { setIsSignUp(state => !state) }} color={Colors.accentColor} />
               </View>
             </ScrollView>
           </Card>
