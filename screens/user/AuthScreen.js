@@ -1,5 +1,5 @@
-import React, {useReducer, useCallback} from 'react';
-import { Text, View, StyleSheet, KeyboardAvoidingView, Keyboard, Button, Alert } from 'react-native';
+import React, {useReducer, useCallback, useState} from 'react';
+import { Text, View, StyleSheet, KeyboardAvoidingView, Keyboard, Button, Alert, TouchableWithoutFeedback } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Card from '../../components/UI/Card';
 import Input from '../../components/UI/Input';
@@ -40,7 +40,7 @@ const formReducer = (state, action) => {
 
 const AuthScreen = props => {
   const dispatch = useDispatch();
-
+  const [isSignUp,setIsSignUp] = useState(false);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       email: '',
@@ -62,9 +62,12 @@ const AuthScreen = props => {
     })   
   },[dispatchFormState])
 
-  const loginHandler = () => {
+  const authHandler = () => {
     if(formState.formIsValid)
+    isSignUp?  
       dispatch(authActions.signUp(formState.inputValues.email, formState.inputValues.password))
+      :
+      dispatch(authActions.signIn(formState.inputValues.email, formState.inputValues.password))
     else{
       Alert.alert('Error','Please correct errors on the screen', [{title:'Ok'}]);
     }
@@ -74,44 +77,46 @@ const AuthScreen = props => {
       behavior="padding"
       keyboardVerticalOffset={50}
       style={styles.screen}
-     >    
-    <LinearGradient colors={['#ffffff','#6200EE','#ffffff']} style={styles.gradient}> 
-      <Card style={styles.authContainer}>
-        <ScrollView>
-          <Input 
-            id="email"
-            label="E-mail"
-            required
-            email
-            errorText="Please enter valid email address"
-            initialValue=''
-            onInputChanged={inputChangeHandler}
-            keyboardType="email-address"
-            textContentType="emailAddress"
-            autoCapitalize="none"            
-          />
-          <Input 
-            id="password"
-            label="Password"
-            required                      
-            onInputChanged={inputChangeHandler}  
-            minLength={5}
-            initialValue=''
-            secureTextEntry
-            textContentType="password"
-            autoCapitalize="none"
-            minLength={6}
-            errorText="password should be at least six characters"
-          />      
-          <View style={styles.buttonContainer}>
-            <Button title="Login" onPress={loginHandler} color={Colors.primaryColor}/>
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button title="Switch to Sign up" onPress={()=>{}} color={Colors.accentColor}/>
-          </View> 
-        </ScrollView>
-      </Card>
-    </LinearGradient>
+    >
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <LinearGradient colors={['#ffffff', '#6200EE', '#ffffff']} style={styles.gradient}>
+          <Card style={styles.authContainer}>
+            <ScrollView>
+              <Input
+                id="email"
+                label="E-mail"
+                required
+                email
+                errorText="Please enter valid email address"
+                initialValue=''
+                onInputChanged={inputChangeHandler}
+                keyboardType="email-address"
+                textContentType="emailAddress"
+                autoCapitalize="none"
+              />
+              <Input
+                id="password"
+                label="Password"
+                required
+                onInputChanged={inputChangeHandler}
+                minLength={5}
+                initialValue=''
+                secureTextEntry
+                textContentType="password"
+                autoCapitalize="none"
+                minLength={6}
+                errorText="password should be at least six characters"
+              />
+              <View style={styles.buttonContainer}>
+                <Button title={isSignUp? "Sign up" : "Login"} onPress={authHandler} color={Colors.primaryColor} />
+              </View>
+              <View style={styles.buttonContainer}>
+                <Button title={isSignUp ? 'Switch to Sign In' : 'Switch to Sign up'} onPress={() => { setIsSignUp(state => !state) }} color={Colors.accentColor} />
+              </View>
+            </ScrollView>
+          </Card>
+        </LinearGradient>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
