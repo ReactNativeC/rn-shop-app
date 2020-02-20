@@ -7,7 +7,6 @@ import Colors from '../../constants/colors';
 import * as authActions from '../../store/actions/auth';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch } from 'react-redux';
-import { fetchProducts } from '../../store/actions/products';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -98,12 +97,6 @@ const AuthScreen = props => {
       Alert.alert('Error',error,[{title:"OK"}]);
     }
   },[error])
-
-  // if(isProcessing)
-  // {
-  //   console.log("isProcessing: " + isProcessing);
-  //   return (<ActivityIndicator size="large" color={Colors.primaryColor} />);
-  // }
 
   return (
     <KeyboardAvoidingView

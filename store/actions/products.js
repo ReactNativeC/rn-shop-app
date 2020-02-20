@@ -7,12 +7,14 @@ import Product from '../../model/product';
 
 export const fetchProducts = () => {
   return async dispatch => {
+   
     try {
       //Get products from database
       const response = await fetch(Config.database + '/products.json');
       //if there is authentication issues or any other issues, firebase may not throw the error but just return a a non-200 code 
       if (!response.ok) {
-        throw new Error("Something went wrong!");
+        const res = await response.json();
+        throw new Error(res.error);
       }
 
       const resData = await response.json();
@@ -40,15 +42,17 @@ export const fetchProducts = () => {
 }
 
 export const deleteProduct = id => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     try {
       //delete from server before dispatching delete action to redux
-      const response = await fetch(`${Config.database}/products/${id}.json`, {
+      const response = await fetch(`${Config.database}/products/${id}.json?auth=${getState().auth.token}`, {
         method: 'DELETE',
       })
-      if(!response.ok)
-        throw new Error("Something went wrong");
-
+      if(!response.ok) {
+        const res = await response.json();
+        throw new Error(res.error);
+      }
+        
       dispatch({
         type: DELETE_PRODUCT,
         productId: id
@@ -60,10 +64,10 @@ export const deleteProduct = id => {
 }
 
 export const addProduct = product => {
-  return async  dispatch => {
+  return async  (dispatch, getState) => {
     try {
       //any async action to udpate database goes here
-      const response = await fetch(`${Config.database}/products.json`, {
+      const response = await fetch(`${Config.database}/products.json?auth=${getState().auth.token}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +82,8 @@ export const addProduct = product => {
       })
       //even if we receive authentication 401 or some other non-OK(200) error, let the user know.
       if(!response.ok) {
-        throw new Error("Something went wrong!");
+        const res = await response.json();
+        throw new Error(res.error);
       }
 
       const resData = await response.json();
@@ -96,14 +101,14 @@ export const addProduct = product => {
 }
 
 export const editProduct = product => {
-  return async dispatch => {
-    try {
+  return async (dispatch, getState) => {
+    try {    
     //update database first before dispatcing action    
     //PATCH HTTP method only updates attributes that we specify in the body payload
-    const response = await fetch(`${Config.database}/products/${product.id}.json`, {
+    const response = await fetch(`${Config.database}/products/${product.id}.json?auth=${getState().auth.token}`, {
       method: 'PATCH', 
       headers: {
-        'Content-Type': 'application/json',        
+        'Content-Type': 'application/json',       
       }, 
       body: JSON.stringify({
         title: product.title, 
@@ -113,7 +118,8 @@ export const editProduct = product => {
     })        
     //even if we receive authentication 401 or some other non-OK(200) error, let the user know.
     if (!response.ok) {
-      throw new Error("Something went wrong!");
+      const res = await response.json();
+      throw new Error(res.error);
     }
     dispatch({
       type: EDIT_PRODUCT, 

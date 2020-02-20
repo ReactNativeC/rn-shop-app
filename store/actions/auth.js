@@ -1,7 +1,7 @@
 import Config from '../../secrets/config';
 
-const SIGN_UP = 'SIGN_UP';
-const SIGN_IN = 'SIGN_IN';
+export const SIGNUP = 'SIGNUP';
+export const SIGNIN = 'SIGNIN';
 
 export const signUp = (email, password) => {
   return async dispatch => {
@@ -24,10 +24,12 @@ export const signUp = (email, password) => {
         throw new Error(processError(res.error.message));
       }
 
-      const resData = await response.json();
-      console.log(resData);
-
-      dispatch({ type: SIGN_UP });
+      const resData = await response.json();           
+      dispatch({ 
+        type: SIGNUP, 
+        token: resData.idToken, 
+        userId: resData.localId
+      });
     } catch (err) {
       throw err;
     }
@@ -56,8 +58,12 @@ export const signIn = (email, password) => {
       }
 
       const resData = await response.json();     
-
-      dispatch({ type: SIGN_IN });
+      
+      dispatch({ 
+        type: SIGNIN, 
+        token: resData.idToken, 
+        userId: resData.localId
+      });
     } catch (err) {
      
       throw err;
