@@ -70,20 +70,22 @@ const AuthScreen = props => {
         setIsProcessing(true); 
         setError(null)
         try {       
-          await dispatch(authActions.signUp(formState.inputValues.email, formState.inputValues.password));
+          await dispatch(authActions.signUp(formState.inputValues.email, formState.inputValues.password));          
+          props.navigation.navigate('Shop');
         } catch(err) {
           setError(err.message);
-        }
-        setIsProcessing(false);
+          setIsProcessing(false);
+        }        
       } else {
         setIsProcessing(true);        
         setError(null)
         try {
-          await dispatch(authActions.signIn(formState.inputValues.email, formState.inputValues.password));
+          await dispatch(authActions.signIn(formState.inputValues.email, formState.inputValues.password));          
+          props.navigation.navigate('Shop');
         } catch(err) {
           setError(err.message);
-        }
-        setIsProcessing(false);        
+          setIsProcessing(false);  
+        }              
       }
     }
     else {

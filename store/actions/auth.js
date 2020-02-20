@@ -21,7 +21,7 @@ export const signUp = (email, password) => {
 
       if (!response.ok) {
         const res = await response.json();
-        throw new Error(processError(res.error));
+        throw new Error(processError(res.error.message));
       }
 
       const resData = await response.json();
@@ -49,14 +49,13 @@ export const signIn = (email, password) => {
             returnSecureToken: true
           })
         });
-
+        
       if (!response.ok) {
-        const res = await response.json();
+        const res = await response.json();        
         throw new Error(processError(res.error.message));
       }
 
-      const resData = await response.json();
-      console.log(resData);
+      const resData = await response.json();     
 
       dispatch({ type: SIGN_IN });
     } catch (err) {
@@ -82,13 +81,13 @@ const processError = (error) => {
       errorMessage = 'This email is not registered. pleas switch to sign up!';
       break;
     case 'INVALID_PASSWORD':
-      errorMessage = 'The password is invalid or the user does not have a password.';
+      errorMessage = 'The password is invalid';
       break;
     case 'USER_DISABLED':
       errorMessage = 'The user account has been disabled by an administrator.'
       break;
-    default:
-      errorMessage = "Something went wrong. Please try again!"
+    default:      
+      errorMessage = error
       break;
   }
 
