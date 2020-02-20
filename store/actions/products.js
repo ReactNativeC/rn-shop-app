@@ -6,8 +6,8 @@ import Config from '../../secrets/config';
 import Product from '../../model/product';
 
 export const fetchProducts = () => {
-  return async dispatch => {
-   
+  return async (dispatch, getState) => {
+   const userId = getState().auth.userId;
     try {
       //Get products from database
       const response = await fetch(Config.database + '/products.json');
@@ -22,7 +22,7 @@ export const fetchProducts = () => {
       for (const key in resData) {
         loadedProducts.push(new Product(
           key,
-          "u1",
+          resData[key].ownerId,
           resData[key].title,
           resData[key].imageUrl,
           resData[key].description,
@@ -32,7 +32,8 @@ export const fetchProducts = () => {
       }
       dispatch({
         type: SET_PRODUCTS,
-        products: loadedProducts
+        products: loadedProducts,
+        userId: userId
       })
     } catch (err) {
       //send the error to analytics/logs

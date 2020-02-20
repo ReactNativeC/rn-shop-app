@@ -43,7 +43,8 @@ const EditProductScreen = (props) => {
   const editedProduct = useSelector(state=> state.products.availableProducts.find(product => product.id === productId)); 
   const [error, setError] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
- 
+  const userId = useSelector(state=> state.auth.userId);
+  
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: editedProduct ? editedProduct.title : '',
@@ -79,7 +80,7 @@ const EditProductScreen = (props) => {
       setIsProcessing(true);
       setError(null);
 
-      editedProduct ?        
+      if(editedProduct) {
         await dispatch(productActions.editProduct(new Product(
           editedProduct.id,
           editedProduct.ownerId,
@@ -87,15 +88,15 @@ const EditProductScreen = (props) => {
           formState.inputValues.imageUrl,
           formState.inputValues.description,
           +formState.inputValues.price)))
-        :
+      } else {        
         await dispatch(productActions.addProduct(new Product(
           1,
-          "u1",
+          userId,
           formState.inputValues.title,
           formState.inputValues.imageUrl,
           formState.inputValues.description,
           +formState.inputValues.price)))              
-        
+      }
         props.navigation.goBack();    
     } catch (err) {       
       setError(err.message);
