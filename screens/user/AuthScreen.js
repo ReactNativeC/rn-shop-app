@@ -1,5 +1,5 @@
-import React, {useReducer, useCallback, useState} from 'react';
-import { Text, View, StyleSheet, KeyboardAvoidingView, Keyboard, Button, Alert, TouchableWithoutFeedback } from 'react-native';
+import React, {useReducer, useCallback, useState, useEffect} from 'react';
+import {View, StyleSheet, KeyboardAvoidingView, Keyboard, Button, Alert, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Card from '../../components/UI/Card';
 import Input from '../../components/UI/Input';
@@ -41,6 +41,8 @@ const formReducer = (state, action) => {
 const AuthScreen = props => {
   const dispatch = useDispatch();
   const [isSignUp,setIsSignUp] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState(null);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       email: '',
@@ -62,16 +64,45 @@ const AuthScreen = props => {
     })   
   },[dispatchFormState])
 
-  const authHandler = () => {
-    if(formState.formIsValid)
-    isSignUp?  
-      dispatch(authActions.signUp(formState.inputValues.email, formState.inputValues.password))
-      :
-      dispatch(authActions.signIn(formState.inputValues.email, formState.inputValues.password))
-    else{
-      Alert.alert('Error','Please correct errors on the screen', [{title:'Ok'}]);
+  const authHandler = async () => {
+    if (formState.formIsValid) {
+      if (isSignUp) {
+        setIsProcessing(true); 
+        setError(null)
+        try {       
+          await dispatch(authActions.signUp(formState.inputValues.email, formState.inputValues.password));
+        } catch(err) {
+          setError(err.message);
+        }
+        setIsProcessing(false);
+      } else {
+        setIsProcessing(true);        
+        setError(null)
+        try {
+          await dispatch(authActions.signIn(formState.inputValues.email, formState.inputValues.password));
+        } catch(err) {
+          setError(err.message);
+        }
+        setIsProcessing(false);        
+      }
+    }
+    else {
+      Alert.alert('Error', 'Please correct errors on the screen', [{ title: 'Ok' }]);
     }
   }
+
+  useEffect(() => {    
+    if(error) {
+      Alert.alert('Error',error,[{title:"OK"}]);
+    }
+  },[error])
+
+  // if(isProcessing)
+  // {
+  //   console.log("isProcessing: " + isProcessing);
+  //   return (<ActivityIndicator size="large" color={Colors.primaryColor} />);
+  // }
+
   return (
     <KeyboardAvoidingView
       behavior="padding"
@@ -107,11 +138,12 @@ const AuthScreen = props => {
                 minLength={6}
                 errorText="password should be at least six characters"
               />
+              {isProcessing && <ActivityIndicator size="large" color={Colors.primaryColor} />} 
               <View style={styles.buttonContainer}>
                 <Button title={isSignUp? "Sign up" : "Login"} onPress={authHandler} color={Colors.primaryColor} />
               </View>
               <View style={styles.buttonContainer}>
-                <Button title={`Switch to ${isSignUp? 'Sign Up' : 'Sign In'}`} onPress={() => { setIsSignUp(state => !state) }} color={Colors.accentColor} />
+                <Button title={`Switch to ${isSignUp? 'Login' : 'Sign up'}`} onPress={() => { setIsSignUp(state => !state) }} color={Colors.accentColor} />
               </View>
             </ScrollView>
           </Card>
