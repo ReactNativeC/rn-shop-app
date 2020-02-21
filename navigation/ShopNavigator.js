@@ -98,7 +98,10 @@ const MenuNavigator = createDrawerNavigator({
       <View style={{flex:1, padding: 20}}>
         <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
         <DrawerNavigatorItems {...props} />
-        <Button title="Logout" color={Colors.primaryColor} onPress={()=>{dispatch(authActions.logout()); props.navigation.navigate('Auth')}} />
+        <Button title="Logout" color={Colors.primaryColor} onPress={()=>{
+          dispatch(authActions.logout()); 
+          props.navigation.navigate('Auth')
+          }} />
         </SafeAreaView>
       </View>
     )
