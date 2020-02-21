@@ -13,7 +13,7 @@ export default (state = initialState, action) => {
       }
     case orderActions.PLACE_AN_ORDER:
       const newOrder = new Order(
-        action.orderData.id, 
+        action.orderData.id,
         action.orderData.cartItems, 
         action.orderData.totalAmount, 
         action.orderData.date);

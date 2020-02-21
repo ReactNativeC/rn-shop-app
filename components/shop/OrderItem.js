@@ -12,7 +12,7 @@ const OrderItem = props => {
   for (const key in props.cartItems)
     cartItemsArray.push({
       id: key,
-      quanity: props.cartItems[key].quanity,
+      quantity: props.cartItems[key].quantity,
       productTitle: props.cartItems[key].productTitle,
       productPrice: props.cartItems[key].productPrice,
       sum: props.cartItems[key].sum
@@ -33,11 +33,11 @@ const OrderItem = props => {
     <Card style={styles.order}> 
       <View>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Order {props.orderId}</Text>
-          <Text style={styles.headerText}>Total Amount: ${props.totalAmount.toFixed(2)}</Text>
+          <Text style={styles.headerText}>Total Amount: ${(+props.totalAmount).toFixed(2)}</Text>
         </View>
         <View style={styles.orderDateContainer}>
           <Text style={styles.orderDate} numberOfLines={1}> Ordered on {props.orderedDate}</Text>
+          {/* <Text style={styles.orderDate}>(Order# {props.orderId})</Text> */}
         </View>
         <View style={{marginBottom: 10}}>
           <Button  title={showDetails? "Hide Details":"Show Details"} color={Colors.accentColor} onPress={() => setShowDetails(state => !state)} />

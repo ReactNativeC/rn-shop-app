@@ -22,7 +22,7 @@ const OrdersScreen = props => {
       cartItems = {itemData.item.cartItems}
       totalAmount = {itemData.item.totalAmount}
       orderedDate= {itemData.item.date}
-      orderId={itemData.item.orderId}
+      orderId={itemData.item.id}
     />
     )
   }
