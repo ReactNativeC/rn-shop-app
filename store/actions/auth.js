@@ -76,7 +76,8 @@ export const authenticate = (token, userId) => {
 }
 
 export const logout = () => {  
-    saveDataToAsyncStorage(null, null, new Date().toISOString());
+    AsyncStorage.removeItem('userData'); //this returns a promise and we are not waiting for the callback here because we are not interested 
+                                        // in the result of removeItem function. 
     return {type: LOGOUT};
 }
 
