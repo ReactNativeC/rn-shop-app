@@ -43,7 +43,7 @@ export const placeAnOrder = (cartItems, totalAmount) => {
     try {
       const userId = getState().auth.userId;
       const date = new Date().toISOString();
-      console.log("auth.token: " + getState().auth.token)
+            
       const response = await fetch(`${Config.database}/orders/${userId}.json?auth=${getState().auth.token}`, {
         method: 'POST',
         headers: {

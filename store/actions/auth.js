@@ -1,7 +1,8 @@
+import { AsyncStorage } from 'react-native';
 import Config from '../../secrets/config';
 
-export const SIGNUP = 'SIGNUP';
-export const SIGNIN = 'SIGNIN';
+export const AUTHENTICATE = 'AUTHENTICATE';
+export const LOGOUT = 'LOGOUT';
 
 export const signUp = (email, password) => {
   return async dispatch => {
@@ -25,11 +26,8 @@ export const signUp = (email, password) => {
       }
 
       const resData = await response.json();           
-      dispatch({ 
-        type: SIGNUP, 
-        token: resData.idToken, 
-        userId: resData.localId
-      });
+      dispatch(authenticate(resData.idToken, resData.localId));
+      saveDataToAsyncStorage(resData.idToken, resData.localId, resData.expiresIn)
     } catch (err) {
       throw err;
     }
@@ -58,17 +56,40 @@ export const signIn = (email, password) => {
       }
 
       const resData = await response.json();     
-      
-      dispatch({ 
-        type: SIGNIN, 
-        token: resData.idToken, 
-        userId: resData.localId
-      });
+      dispatch(authenticate(resData.idToken, resData.localId));
+      saveDataToAsyncStorage(resData.idToken, resData.localId, resData.expiresIn)
     } catch (err) {
      
       throw err;
     }
   }
+}
+
+export const authenticate = (token, userId) => {
+  return async dispatch => {
+    dispatch({ 
+      type: AUTHENTICATE, 
+      token: token, 
+      userId: userId
+    });
+  }
+}
+
+export const logout = () => {
+  return async dispath => {
+    saveDataToAsyncStorage(null, null, new Date().toISOString());
+    dispath({type: LOGOUT});
+  }
+}
+
+const saveDataToAsyncStorage = (token, userId, tokenExpiration) => {
+  
+  AsyncStorage.setItem('userData', JSON.stringify({
+    token: token, 
+    userId: userId,
+    expiration: (new Date( new Date().getTime() + parseInt(tokenExpiration) * 1000)).toISOString()
+  }))
+  
 }
 
 const processError = (error) => {  
