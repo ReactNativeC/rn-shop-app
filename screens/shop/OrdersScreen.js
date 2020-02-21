@@ -1,11 +1,12 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { Text, View,Button, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, View, Button, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
 import OrderItem from '../../components/shop/OrderItem';
 import * as OrderActions from '../../store/actions/order';
 import Colors from '../../constants/colors';
+import colors from '../../constants/colors';
 
 const OrdersScreen = props => {
   const dispatch = useDispatch();
@@ -70,6 +71,15 @@ const OrdersScreen = props => {
     );
   }
 
+    
+  if(orders.length === 0) {
+    return (
+      <View style={styles.noDataFoundTextContainer}>
+        <Text style={styles.nodataFoundText}>You have not ordered anything yet!</Text>
+      </View>
+    )
+  }
+
   return (
     <FlatList 
       onRefresh={loadOrders}
@@ -96,7 +106,19 @@ const styles = StyleSheet.create({
     fontSize: 'Roboto',
     fontSize: 16,
     color: 'red'
+  }, 
+  nodataFoundText: {
+    fontFamily: 'Roboto',
+    fontSize: 20, 
+    color: colors.primaryColor
+  },
+  noDataFoundTextContainer: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 10
   }
+
 });
 
 OrdersScreen.navigationOptions = navData => {

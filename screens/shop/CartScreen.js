@@ -58,6 +58,15 @@ const CartScreen = props => {
     );
   }
 
+      
+  if(cartItems.length === 0) {
+    return (
+      <View style={styles.noDataFoundTextContainer}>
+        <Text style={styles.nodataFoundText}>Your cart is empty :( </Text>
+      </View>
+    )
+  }
+
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
@@ -125,5 +134,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  nodataFoundText: {
+    fontFamily: 'Roboto',
+    fontSize: 20, 
+    color: Colors.primaryColor
+  },
+  noDataFoundTextContainer: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 10
+  }
 })
 export default CartScreen;

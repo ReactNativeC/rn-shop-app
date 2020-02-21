@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, Platform, Button, Dimensions , StyleSheet, Alert, ActivityIndicator} from 'react-native';
+import { FlatList, Text, View, Platform, Button, Dimensions , StyleSheet, Alert, ActivityIndicator} from 'react-native';
 import { useSelector, useDispatch  } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import * as productActions from '../../store/actions/products';
@@ -67,6 +67,14 @@ const UserProductsScreen = (props) => {
       </View>
     )
   }
+  
+  if(PRODUCTS.length === 0) {
+    return (
+      <View style={styles.noDataFoundTextContainer}>
+        <Text style={styles.nodataFoundText}>No products found!</Text>
+      </View>
+    )
+  }
 
   return (
     <FlatList
@@ -103,6 +111,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  nodataFoundText: {
+    fontFamily: 'Roboto',
+    fontSize: 20, 
+    color: Colors.primaryColor
+  },
+  noDataFoundTextContainer: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 10
+  }
 })
 
 export default UserProductsScreen;

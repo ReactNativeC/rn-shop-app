@@ -3,8 +3,8 @@ import * as productActions  from '../../store/actions/products';
 import Product from '../../model/product';
 
 const initialState = {
-  availableProducts: PRODUCTS,
-  userProducts: ''
+  availableProducts: [],
+  userProducts: []
 }
 
 export default (state = initialState, action) => {    
