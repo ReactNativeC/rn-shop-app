@@ -3,6 +3,7 @@ import Config from '../../secrets/config';
 
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
+let timer;
 
 export const signUp = (email, password) => {
   return async dispatch => {
@@ -26,7 +27,7 @@ export const signUp = (email, password) => {
       }
 
       const resData = await response.json();           
-      dispatch(authenticate(resData.idToken, resData.localId));
+      dispatch(authenticate(resData.idToken, resData.localId, parseInt(resData.expiresIn)*1000));
       saveDataToAsyncStorage(resData.idToken, resData.localId, resData.expiresIn)
     } catch (err) {
       throw err;
@@ -56,7 +57,7 @@ export const signIn = (email, password) => {
       }
 
       const resData = await response.json();     
-      dispatch(authenticate(resData.idToken, resData.localId));
+      dispatch(authenticate(resData.idToken, resData.localId, parseInt(resData.expiresIn)*1000));
       saveDataToAsyncStorage(resData.idToken, resData.localId, resData.expiresIn)
     } catch (err) {
      
@@ -65,8 +66,9 @@ export const signIn = (email, password) => {
   }
 }
 
-export const authenticate = (token, userId) => {
+export const authenticate = (token, userId, expirationTime) => {
   return async dispatch => {
+    dispatch(setLogoutTimer(expirationTime))
     dispatch({ 
       type: AUTHENTICATE, 
       token: token, 
@@ -76,9 +78,24 @@ export const authenticate = (token, userId) => {
 }
 
 export const logout = () => {  
+    clearLogoutTimer();
     AsyncStorage.removeItem('userData'); //this returns a promise and we are not waiting for the callback here because we are not interested 
                                         // in the result of removeItem function. 
     return {type: LOGOUT};
+}
+
+clearLogoutTimer = () => {
+  if(timer){
+    clearTimeout(timer)
+  }
+}
+
+setLogoutTimer = (expirationTime) => {
+  return async dispatch => {
+    timer = setTimeout(() => {
+      dispatch(logout());
+    },expirationTime);
+  } 
 }
 
 const saveDataToAsyncStorage = (token, userId, tokenExpiration) => {

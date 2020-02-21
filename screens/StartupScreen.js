@@ -21,12 +21,12 @@ const StatrupScreen = props => {
       props.navigation.navigate('Auth'); 
       return;     
      }            
-          
+     const expirationTime = expirationDate.getTime() - new Date().getTime();          
      //Log the user in.
      props.navigation.navigate('Shop');          
      
      //save token and user id to redux store
-     dispatch(authActions.authenticate(token, userId));
+     dispatch(authActions.authenticate(token, userId, expirationTime));
     }
     tryLogin() 
   },[dispatch])

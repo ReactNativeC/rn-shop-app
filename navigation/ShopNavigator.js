@@ -100,7 +100,7 @@ const MenuNavigator = createDrawerNavigator({
         <DrawerNavigatorItems {...props} />
         <Button title="Logout" color={Colors.primaryColor} onPress={()=>{
           dispatch(authActions.logout()); 
-          props.navigation.navigate('Auth')
+          //props.navigation.navigate('Auth') //because in NavigationContinaer we are already navigation to Auth if logged out
           }} />
         </SafeAreaView>
       </View>
