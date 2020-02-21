@@ -75,11 +75,9 @@ export const authenticate = (token, userId) => {
   }
 }
 
-export const logout = () => {
-  return async dispath => {
+export const logout = () => {  
     saveDataToAsyncStorage(null, null, new Date().toISOString());
-    dispath({type: LOGOUT});
-  }
+    return {type: LOGOUT};
 }
 
 const saveDataToAsyncStorage = (token, userId, tokenExpiration) => {
